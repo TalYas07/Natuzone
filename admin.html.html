@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natu'zone – Admin, Box Mensuelle & Chat IA Herboriste</title>
+<!-- SEO META OPTIMISÉ -->
+<meta name="description" content="Natu'zone – Herboristerie premium française. Plantes médicinales bio, huiles essentielles HEBBD, tisanes & compléments naturels. Livraison gratuite dès 49€. Certifié Ecocert.">
+<meta name="keywords" content="herboristerie en ligne, plantes médicinales bio, huiles essentielles, tisanes bio, compléments naturels, phytothérapie, aromathérapie française">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://natuzone.fr/">
+<!-- Open Graph -->
+<meta property="og:title" content="Natu'zone – Herboristerie Premium Française">
+<meta property="og:description" content="Plantes médicinales bio, huiles essentielles et soins naturels. Qualité certifiée, fabrication française, livraison express.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://natuzone.fr">
+<!-- Schema.org JSON-LD -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Store","name":"Natu'zone","description":"Herboristerie premium française en ligne","url":"https://natuzone.fr","telephone":"+33476000000","address":{"@type":"PostalAddress","streetAddress":"12 rue des Herboristes","addressLocality":"Grenoble","postalCode":"38000","addressCountry":"FR"},"priceRange":"€€","openingHours":"Mo-Sa 09:00-18:00","aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"2847"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sage:#7a9e7e;--sage-light:#a8c4a8;--sage-dark:#4e7352;
+  --beige:#f5f0e8;--beige-mid:#e8e0d0;--beige-dark:#c8b89a;
+  --cream:#fdfaf4;--brown:#6b4f2a;
+  --text-dark:#2a2318;--text-mid:#5c4f3a;--text-light:#8a7a65;
+  --green-pale:#e8f0e8;--gold:#b8960c;--red:#c94a30;
+  --admin-bg:#0f1a12;--admin-surface:#162018;--admin-border:#243028;
+  --admin-text:#e8f0e8;--admin-muted:#7a9e7e;
+  --font-serif:'Cormorant Garamond',Georgia,serif;
+  --font-sans:'DM Sans',sans-serif;
+  --r:12px;--rsm:7px;
+  --sh:0 2px 16px rgba(74,63,42,0.08);--sh-lg:0 8px 40px rgba(74,63,42,0.14);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-sans);background:var(--cream);color:var(--text-dark);font-size:15px;line-height:1.6;overflow-x:hidden;}
+
+/* ── NAV PRINCIPALE ── */
+.top-nav{background:rgba(253,250,244,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--beige-mid);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:400;}
+.nav-logo{font-family:var(--font-serif);font-size:1.5rem;font-weight:600;color:var(--sage-dark);text-decoration:none;display:flex;align-items:center;gap:7px;}
+.nav-logo span{color:var(--brown);}
+.nav-tabs{display:flex;gap:0;}
+.nav-tab{padding:8px 16px;font-size:0.8rem;font-weight:400;color:var(--text-mid);cursor:pointer;border-bottom:2px solid transparent;letter-spacing:0.05em;text-transform:uppercase;transition:all 0.2s;}
+.nav-tab:hover{color:var(--sage-dark);}
+.nav-tab.active{color:var(--sage-dark);border-bottom-color:var(--sage-dark);font-weight:500;}
+.nav-tab.admin-tab{color:#e8f0e8;background:var(--admin-bg);border-radius:6px 6px 0 0;padding:6px 14px;margin-top:4px;font-size:0.75rem;}
+.nav-tab.admin-tab.active{background:var(--sage-dark);border-bottom-color:transparent;}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:var(--font-sans);font-weight:500;cursor:pointer;transition:all 0.22s;border:none;border-radius:40px;}
+.btn-primary{background:var(--sage-dark);color:#fff;padding:10px 24px;font-size:0.85rem;box-shadow:0 3px 14px rgba(78,115,82,0.25);}
+.btn-primary:hover{background:var(--sage);transform:translateY(-2px);}
+.btn-outline{background:transparent;color:var(--text-dark);padding:9px 20px;font-size:0.82rem;border:1.5px solid var(--beige-dark);}
+.btn-outline:hover{border-color:var(--sage);color:var(--sage-dark);}
+.btn-sm{padding:6px 14px;font-size:0.76rem;}
+.btn-danger{background:#c94a30;color:#fff;padding:8px 18px;font-size:0.8rem;}
+.btn-danger:hover{background:#a83a22;}
+
+/* ══════════════════════════════════════
+   DASHBOARD ADMIN — DARK THEME
+══════════════════════════════════════ */
+#page-admin{background:var(--admin-bg);min-height:calc(100vh - 64px);}
+.admin-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 64px);}
+
+/* Sidebar admin */
+.admin-sidebar{background:var(--admin-surface);border-right:1px solid var(--admin-border);padding:1.5rem 0;}
+.admin-brand{padding:0 1.25rem 1.5rem;border-bottom:1px solid var(--admin-border);margin-bottom:1rem;}
+.admin-brand-name{font-family:var(--font-serif);font-size:1.1rem;color:var(--admin-text);font-weight:400;}
+.admin-brand-role{font-size:0.7rem;color:var(--admin-muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;}
+.admin-nav-section{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--admin-muted);padding:0.75rem 1.25rem 0.35rem;margin-top:0.5rem;}
+.admin-nav-item{display:flex;align-items:center;gap:10px;padding:9px 1.25rem;font-size:0.83rem;color:rgba(232,240,232,0.65);cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;}
+.admin-nav-item:hover{background:rgba(122,158,126,0.1);color:var(--admin-text);}
+.admin-nav-item.active{background:rgba(78,115,82,0.2);color:#a8c4a8;border-left-color:var(--sage);}
+.admin-nav-item .aicon{width:16px;text-align:center;font-size:0.85rem;}
+.admin-badge{margin-left:auto;background:var(--red);color:#fff;font-size:0.6rem;font-weight:600;padding:1px 6px;border-radius:10px;}
+
+/* Main admin */
+.admin-main{padding:2rem;overflow-x:hidden;}
+.admin-panel{display:none;}
+.admin-panel.active{display:block;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.admin-page-title{font-family:var(--font-serif);font-size:1.6rem;font-weight:300;color:var(--admin-text);margin-bottom:0.3rem;}
+.admin-page-sub{font-size:0.8rem;color:var(--admin-muted);margin-bottom:2rem;}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+.kpi-card{background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:var(--r);padding:1.25rem;position:relative;overflow:hidden;transition:all 0.2s;}
+.kpi-card:hover{border-color:rgba(122,158,126,0.3);}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kpi-card.green::before{background:linear-gradient(90deg,var(--sage-dark),var(--sage));}
+.kpi-card.gold::before{background:linear-gradient(90deg,#8b6940,#b8960c);}
+.kpi-card.blue::before{background:linear-gradient(90deg,#1a4a7a,#3a8acd);}
+.kpi-card.red::before{background:linear-gradient(90deg,#7a2a1a,var(--red));}
+.kpi-icon{font-size:1.1rem;margin-bottom:0.5rem;opacity:0.7;}
+.kpi-val{font-family:var(--font-serif);font-size:1.9rem;font-weight:600;color:var(--admin-text);line-height:1;margin-bottom:3px;}
+.kpi-label{font-size:0.72rem;color:var(--admin-muted);letter-spacing:0.04em;}
+.kpi-trend{font-size:0.72rem;margin-top:6px;display:flex;align-items:center;gap:4px;}
+.kpi-trend.up{color:#6abf6a;}
+.kpi-trend.down{color:var(--red);}
+
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-bottom:2rem;}
+.admin-card{background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:var(--r);padding:1.5rem;}
+.admin-card-title{font-size:0.8rem;font-weight:500;color:var(--admin-text);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
+.admin-card-title span{font-size:0.7rem;color:var(--admin-muted);text-transform:none;letter-spacing:0;font-weight:400;}
+
+/* Bar chart simple */
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:120px;padding-bottom:1.5rem;position:relative;}
+.bar-chart::after{content:'';position:absolute;bottom:1.5rem;left:0;right:0;height:1px;background:var(--admin-border);}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:all 0.4s ease;cursor:pointer;position:relative;}
+.bar:hover{filter:brightness(1.2);}
+.bar-label{font-size:0.62rem;color:var(--admin-muted);}
+.bar-val{font-size:0.65rem;color:var(--admin-text);font-weight:500;}
+
+/* Donut chart */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;}
+.donut-svg{width:140px;height:140px;margin-bottom:1rem;}
+.donut-legend{display:flex;flex-direction:column;gap:6px;width:100%;}
+.donut-item{display:flex;align-items:center;gap:8px;font-size:0.75rem;}
+.donut-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.donut-item-label{color:var(--admin-muted);flex:1;}
+.donut-item-val{color:var(--admin-text);font-weight:500;}
+
+/* TABLE COMMANDES */
+.admin-table{width:100%;border-collapse:collapse;}
+.admin-table th{font-size:0.68rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--admin-muted);padding:0.6rem 1rem;text-align:left;border-bottom:1px solid var(--admin-border);}
+.admin-table td{padding:0.8rem 1rem;border-bottom:1px solid rgba(36,48,40,0.5);font-size:0.82rem;color:rgba(232,240,232,0.8);vertical-align:middle;}
+.admin-table tr:hover td{background:rgba(122,158,126,0.05);}
+.status-pill{font-size:0.67rem;font-weight:500;padding:3px 9px;border-radius:40px;display:inline-block;}
+.s-delivered{background:rgba(78,115,82,0.2);color:#6abf6a;}
+.s-shipped{background:rgba(58,138,205,0.2);color:#7abfef;}
+.s-processing{background:rgba(184,150,12,0.2);color:#d4b040;}
+.s-cancelled{background:rgba(201,74,48,0.2);color:#e88a70;}
+.order-action{font-size:0.72rem;color:var(--sage);cursor:pointer;text-decoration:underline;}
+.order-action:hover{color:var(--sage-light);}
+
+/* STOCK BARS */
+.stock-item{display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;}
+.stock-name{font-size:0.78rem;color:rgba(232,240,232,0.8);width:140px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stock-bar-track{flex:1;height:6px;background:var(--admin-border);border-radius:10px;overflow:hidden;}
+.stock-bar-fill{height:100%;border-radius:10px;transition:width 1s ease;}
+.stock-qty{font-size:0.72rem;color:var(--admin-muted);width:50px;text-align:right;flex-shrink:0;}
+.stock-alert{font-size:0.65rem;color:var(--red);margin-left:4px;}
+
+/* TOGGLE SWITCH */
+.toggle-sw{width:42px;height:22px;background:var(--admin-border);border-radius:11px;cursor:pointer;position:relative;transition:background 0.3s;flex-shrink:0;}
+.toggle-sw.on{background:var(--sage-dark);}
+.toggle-sw::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform 0.3s;}
+.toggle-sw.on::after{transform:translateX(20px);}
+
+/* ══════════════════════════════════════
+   BOX MENSUELLE — ABONNEMENT
+══════════════════════════════════════ */
+.box-hero{background:linear-gradient(160deg,#1a2e1e 0%,#0f1a12 100%);padding:4rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.box-hero::before{content:'🌿';position:absolute;font-size:20rem;opacity:0.04;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.box-hero-tag{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--sage-light);font-weight:500;margin-bottom:0.6rem;}
+.box-hero-title{font-family:var(--font-serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;color:#fff;margin-bottom:0.75rem;line-height:1.15;}
+.box-hero-title em{color:var(--sage-light);font-style:italic;}
+.box-hero-sub{font-size:0.95rem;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto 2.5rem;font-weight:300;line-height:1.8;}
+
+/* PLANS */
+.plans-section{max-width:1100px;margin:0 auto;padding:3rem 2rem;}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:3rem;}
+.plan-card{background:#fff;border:2px solid var(--beige-mid);border-radius:16px;padding:2rem;position:relative;transition:all 0.3s;text-align:center;}
+.plan-card:hover{transform:translateY(-6px);box-shadow:var(--sh-lg);}
+.plan-card.featured{border-color:var(--sage-dark);box-shadow:0 0 0 4px rgba(78,115,82,0.1);}
+.plan-featured-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--sage-dark);color:#fff;font-size:0.72rem;font-weight:500;padding:4px 16px;border-radius:40px;white-space:nowrap;}
+.plan-emoji{font-size:2.5rem;margin-bottom:0.75rem;}
+.plan-name{font-family:var(--font-serif);font-size:1.4rem;font-weight:400;color:var(--text-dark);margin-bottom:0.3rem;}
+.plan-tagline{font-size:0.78rem;color:var(--text-light);margin-bottom:1.25rem;font-weight:300;}
+.plan-price{font-family:var(--font-serif);font-size:2.8rem;font-weight:600;color:var(--text-dark);line-height:1;}
+.plan-price sup{font-size:1rem;vertical-align:top;margin-top:8px;}
+.plan-period{font-size:0.78rem;color:var(--text-light);margin-bottom:1.25rem;}
+.plan-saving{background:var(--green-pale);color:var(--sage-dark);font-size:0.72rem;font-weight:500;padding:3px 10px;border-radius:40px;display:inline-block;margin-bottom:1.25rem;}
+.plan-features{list-style:none;text-align:left;margin-bottom:1.75rem;display:flex;flex-direction:column;gap:8px;}
+.plan-features li{font-size:0.82rem;color:var(--text-mid);display:flex;align-items:flex-start;gap:8px;line-height:1.4;}
+.plan-features .check{color:var(--sage-dark);font-weight:600;flex-shrink:0;margin-top:1px;}
+.plan-features .cross{color:var(--beige-dark);flex-shrink:0;margin-top:1px;}
+
+/* CONFIGURATEUR BOX */
+.box-configurator{background:#fff;border-radius:var(--r);border:1px solid var(--beige-mid);box-shadow:var(--sh-lg);padding:2.5rem;margin-bottom:2rem;}
+.config-title{font-family:var(--font-serif);font-size:1.5rem;font-weight:300;color:var(--text-dark);margin-bottom:0.4rem;}
+.config-sub{font-size:0.84rem;color:var(--text-light);margin-bottom:2rem;font-weight:300;}
+.config-steps{display:flex;gap:0;margin-bottom:2rem;border-bottom:1px solid var(--beige-mid);}
+.config-step-tab{padding:8px 20px;font-size:0.78rem;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-light);margin-bottom:-1px;transition:all 0.2s;}
+.config-step-tab.active{color:var(--sage-dark);border-bottom-color:var(--sage-dark);font-weight:500;}
+.config-pane{display:none;}
+.config-pane.active{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.config-opt{border:2px solid var(--beige-mid);border-radius:var(--r);padding:1rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.config-opt:hover{border-color:var(--sage-light);}
+.config-opt.selected{border-color:var(--sage-dark);background:var(--green-pale);}
+.config-opt .co-icon{font-size:2rem;margin-bottom:0.4rem;}
+.config-opt .co-name{font-size:0.84rem;font-weight:500;color:var(--text-dark);margin-bottom:2px;}
+.config-opt .co-desc{font-size:0.72rem;color:var(--text-light);}
+
+/* BOX PREVIEW */
+.box-preview{background:linear-gradient(135deg,var(--beige) 0%,var(--cream) 100%);border-radius:var(--r);border:1px solid var(--beige-mid);padding:1.75rem;margin-top:1.5rem;}
+.box-preview-title{font-family:var(--font-serif);font-size:1.1rem;font-weight:400;color:var(--text-dark);margin-bottom:1rem;}
+.box-preview-items{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem;}
+.box-item-chip{background:#fff;border:1px solid var(--beige-mid);border-radius:40px;padding:5px 14px;font-size:0.76rem;color:var(--text-mid);display:flex;align-items:center;gap:6px;}
+.box-item-rm{color:var(--text-light);cursor:pointer;font-size:0.8rem;}
+.box-item-rm:hover{color:var(--red);}
+.box-preview-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--beige-mid);}
+.box-preview-price{font-family:var(--font-serif);font-size:1.5rem;font-weight:600;color:var(--text-dark);}
+.box-preview-note{font-size:0.75rem;color:var(--text-light);}
+
+/* TESTIMONIALS BOX */
+.box-testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem;}
+.box-testi{background:#fff;border-radius:var(--r);border:1px solid var(--beige-mid);padding:1.25rem;box-shadow:var(--sh);}
+.box-testi-stars{color:var(--gold);font-size:0.8rem;margin-bottom:0.5rem;}
+.box-testi-text{font-size:0.82rem;color:var(--text-mid);font-style:italic;font-weight:300;line-height:1.6;margin-bottom:0.75rem;}
+.box-testi-author{font-size:0.75rem;color:var(--text-light);font-weight:500;}
+
+/* ══════════════════════════════════════
+   CHAT IA HERBORISTE
+══════════════════════════════════════ */
+.chat-page{max-width:900px;margin:0 auto;padding:2.5rem 2rem;}
+.chat-hero{text-align:center;margin-bottom:2.5rem;}
+.chat-hero-icon{width:70px;height:70px;background:linear-gradient(135deg,var(--sage),var(--sage-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem;}
+.chat-hero-title{font-family:var(--font-serif);font-size:1.8rem;font-weight:300;color:var(--text-dark);margin-bottom:0.4rem;}
+.chat-hero-title em{color:var(--sage-dark);font-style:italic;}
+.chat-hero-sub{font-size:0.88rem;color:var(--text-mid);font-weight:300;line-height:1.7;}
+.chat-caps{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:0.75rem;}
+.chat-cap{background:var(--green-pale);border:1px solid var(--sage-light);color:var(--sage-dark);font-size:0.72rem;padding:3px 10px;border-radius:40px;}
+
+/* Interface chat */
+.chat-interface{background:#fff;border-radius:20px;border:1px solid var(--beige-mid);box-shadow:var(--sh-lg);overflow:hidden;}
+.chat-header{background:linear-gradient(135deg,var(--sage-dark),#3a6042);padding:1rem 1.5rem;display:flex;align-items:center;gap:12px;}
+.chat-avatar{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.chat-header-info{flex:1;}
+.chat-header-name{color:#fff;font-weight:500;font-size:0.92rem;}
+.chat-header-status{color:rgba(255,255,255,0.7);font-size:0.72rem;display:flex;align-items:center;gap:5px;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#6abf6a;flex-shrink:0;}
+.chat-header-badges{display:flex;gap:6px;}
+.chat-header-badge{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);font-size:0.65rem;padding:2px 8px;border-radius:40px;}
+
+.chat-messages{height:420px;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem;scroll-behavior:smooth;}
+.chat-messages::-webkit-scrollbar{width:4px;}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--beige-dark);border-radius:10px;}
+
+.msg{max-width:78%;display:flex;flex-direction:column;gap:4px;animation:msgIn 0.3s ease both;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{align-self:flex-end;align-items:flex-end;}
+.msg.bot{align-self:flex-start;align-items:flex-start;}
+.msg-bubble{padding:10px 14px;border-radius:16px;font-size:0.86rem;line-height:1.6;}
+.msg.user .msg-bubble{background:var(--sage-dark);color:#fff;border-radius:16px 16px 4px 16px;}
+.msg.bot .msg-bubble{background:var(--beige);color:var(--text-dark);border-radius:16px 16px 16px 4px;}
+.msg-time{font-size:0.65rem;color:var(--text-light);}
+.msg-avatar-row{display:flex;align-items:center;gap:8px;margin-bottom:2px;}
+.msg-bot-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--sage),var(--sage-dark));display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;}
+
+/* Produit recommandé dans le chat */
+.chat-product-card{background:#fff;border:1px solid var(--beige-mid);border-radius:var(--r);padding:0.9rem;display:flex;gap:10px;align-items:center;margin-top:6px;max-width:300px;box-shadow:var(--sh);}
+.chat-product-img{width:48px;height:48px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.chat-product-name{font-size:0.8rem;font-weight:500;color:var(--text-dark);margin-bottom:2px;}
+.chat-product-price{font-family:var(--font-serif);font-size:0.95rem;font-weight:600;color:var(--text-dark);}
+.chat-product-btn{background:var(--sage-dark);color:#fff;border:none;border-radius:40px;padding:5px 12px;font-size:0.7rem;font-weight:500;cursor:pointer;font-family:var(--font-sans);margin-top:4px;white-space:nowrap;}
+
+/* Suggestions rapides */
+.chat-suggestions{padding:0.75rem 1.5rem;display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--beige);}
+.suggestion-chip{background:var(--beige);border:1px solid var(--beige-dark);color:var(--text-mid);font-size:0.76rem;padding:5px 12px;border-radius:40px;cursor:pointer;transition:all 0.18s;font-family:var(--font-sans);}
+.suggestion-chip:hover{background:var(--green-pale);border-color:var(--sage);color:var(--sage-dark);}
+
+/* Input zone */
+.chat-input-zone{padding:1rem 1.5rem;border-top:1px solid var(--beige);display:flex;gap:10px;align-items:flex-end;}
+.chat-textarea{flex:1;border:1.5px solid var(--beige-dark);border-radius:12px;padding:10px 14px;font-family:var(--font-sans);font-size:0.86rem;color:var(--text-dark);background:var(--cream);resize:none;outline:none;transition:border-color 0.2s;min-height:44px;max-height:120px;}
+.chat-textarea:focus{border-color:var(--sage);}
+.chat-textarea::placeholder{color:var(--text-light);font-weight:300;}
+.btn-send{width:42px;height:42px;border-radius:50%;background:var(--sage-dark);border:none;color:#fff;font-size:1rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.btn-send:hover{background:var(--sage);transform:scale(1.05);}
+
+/* Typing indicator */
+.typing-indicator{display:flex;gap:4px;align-items:center;padding:10px 14px;background:var(--beige);border-radius:16px 16px 16px 4px;}
+.typing-dot{width:7px;height:7px;background:var(--sage);border-radius:50%;animation:typing 1.2s infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typing{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+
+.chat-disclaimer{text-align:center;font-size:0.7rem;color:var(--text-light);padding:0.6rem 1rem;background:var(--beige);border-top:1px solid var(--beige-mid);}
+
+/* Sujets chat */
+.chat-topics{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:2rem;}
+.chat-topic{background:#fff;border:1px solid var(--beige-mid);border-radius:var(--r);padding:1rem;cursor:pointer;transition:all 0.2s;text-align:center;box-shadow:var(--sh);}
+.chat-topic:hover{border-color:var(--sage);background:var(--green-pale);transform:translateY(-3px);}
+.ct-icon{font-size:1.6rem;margin-bottom:0.4rem;}
+.ct-label{font-size:0.8rem;font-weight:500;color:var(--text-dark);}
+.ct-desc{font-size:0.7rem;color:var(--text-light);margin-top:2px;}
+
+/* ══════════════════════════════════════
+   PAGE SEO
+══════════════════════════════════════ */
+.seo-page{max-width:1000px;margin:0 auto;padding:2.5rem 2rem;}
+.seo-score-card{background:linear-gradient(135deg,var(--sage-dark),#3a6042);border-radius:16px;padding:2rem;text-align:center;margin-bottom:2rem;color:#fff;}
+.seo-score-num{font-family:var(--font-serif);font-size:4rem;font-weight:600;line-height:1;}
+.seo-score-label{font-size:0.85rem;opacity:0.8;margin-top:4px;}
+.seo-score-bar{background:rgba(255,255,255,0.2);border-radius:10px;height:8px;margin:1rem auto;max-width:300px;overflow:hidden;}
+.seo-score-fill{height:100%;background:#fff;border-radius:10px;transition:width 1.5s ease;}
+
+.seo-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;}
+.seo-card{background:#fff;border-radius:var(--r);border:1px solid var(--beige-mid);box-shadow:var(--sh);padding:1.5rem;}
+.seo-card-title{font-size:0.78rem;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-mid);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.seo-check-list{display:flex;flex-direction:column;gap:0.6rem;}
+.seo-check-item{display:flex;align-items:flex-start;gap:10px;font-size:0.82rem;padding:6px 0;border-bottom:1px solid var(--beige);}
+.seo-check-item:last-child{border-bottom:none;}
+.seo-check-icon{font-size:0.85rem;flex-shrink:0;margin-top:1px;width:18px;text-align:center;}
+.seo-check-text{flex:1;color:var(--text-mid);}
+.seo-check-text strong{display:block;color:var(--text-dark);font-weight:500;margin-bottom:1px;}
+.seo-check-status{font-size:0.7rem;font-weight:500;padding:2px 8px;border-radius:40px;flex-shrink:0;align-self:flex-start;margin-top:2px;}
+.status-ok{background:#e8f5e9;color:#2e7d32;}
+.status-warn{background:#fff8e1;color:#f57f17;}
+.status-err{background:#ffebee;color:#c62828;}
+
+.keyword-table{width:100%;border-collapse:collapse;font-size:0.82rem;}
+.keyword-table th{text-align:left;padding:6px 8px;font-size:0.7rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light);border-bottom:1px solid var(--beige-mid);}
+.keyword-table td{padding:7px 8px;border-bottom:1px solid var(--beige);color:var(--text-mid);}
+.keyword-table tr:last-child td{border-bottom:none;}
+.keyword-table td:first-child{color:var(--text-dark);font-weight:500;}
+.vol-bar{background:var(--beige-mid);border-radius:10px;height:5px;width:80px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px;}
+.vol-fill{height:100%;background:var(--sage);border-radius:10px;}
+.diff-badge{font-size:0.65rem;padding:1px 7px;border-radius:40px;font-weight:500;}
+.diff-low{background:#e8f5e9;color:#2e7d32;}
+.diff-med{background:#fff8e1;color:#f57f17;}
+.diff-high{background:#ffebee;color:#c62828;}
+
+.sitemap-tree{font-family:monospace;font-size:0.78rem;color:var(--text-mid);background:var(--beige);border-radius:var(--rsm);padding:1rem;line-height:1.8;white-space:pre;}
+.sitemap-url{color:var(--sage-dark);}
+.sitemap-prio{color:var(--brown);font-size:0.7rem;}
+
+/* TOAST */
+.toast{position:fixed;top:74px;right:24px;z-index:9999;background:var(--sage-dark);color:#fff;padding:11px 18px;border-radius:var(--r);font-size:0.83rem;box-shadow:0 4px 20px rgba(78,115,82,0.4);transform:translateX(130%);transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1);display:flex;align-items:center;gap:8px;max-width:300px;}
+.toast.show{transform:translateX(0);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .admin-layout{grid-template-columns:1fr;}
+  .admin-sidebar{display:none;}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .charts-row{grid-template-columns:1fr;}
+  .plans-grid{grid-template-columns:1fr;}
+  .box-testimonials{grid-template-columns:1fr;}
+  .config-pane{grid-template-columns:1fr 1fr;}
+  .chat-topics{grid-template-columns:repeat(2,1fr);}
+  .seo-grid{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+  .config-pane{grid-template-columns:1fr;}
+  .chat-topics{grid-template-columns:1fr 1fr;}
+  .top-nav{padding:0 1rem;}
+  .nav-tabs{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"><span id="t-icon">🌿</span><span id="t-msg">Action</span></div>
+
+<!-- ══════════ NAVBAR ══════════ -->
+<nav class="top-nav">
+  <a class="nav-logo" href="#">🌿 Natu'<span>zone</span></a>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showPage('admin',this)">⚙️ Admin</div>
+    <div class="nav-tab" onclick="showPage('box',this)">📦 Box Mensuelle</div>
+    <div class="nav-tab" onclick="showPage('chat',this)">🌿 Chat IA Herboriste</div>
+    <div class="nav-tab" onclick="showPage('seo',this)">📈 SEO & Visibilité</div>
+  </div>
+  <div style="font-size:0.75rem;color:var(--text-light);">Étape 3 / 3 ✅</div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — DASHBOARD ADMIN
+══════════════════════════════════════════ -->
+<div class="page active" id="page-admin">
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-brand">
+      <div class="admin-brand-name">🌿 Natu'zone</div>
+      <div class="admin-brand-role">Dashboard Admin</div>
+    </div>
+
+    <div class="admin-nav-section">Vue d'ensemble</div>
+    <div class="admin-nav-item active" onclick="switchPanel('dashboard',this)"><span class="aicon">📊</span> Tableau de bord</div>
+    <div class="admin-nav-item" onclick="switchPanel('orders',this)"><span class="aicon">📦</span> Commandes <span class="admin-badge">7</span></div>
+    <div class="admin-nav-item" onclick="switchPanel('products',this)"><span class="aicon">🌿</span> Produits</div>
+    <div class="admin-nav-item" onclick="switchPanel('clients',this)"><span class="aicon">👥</span> Clients</div>
+
+    <div class="admin-nav-section">Business</div>
+    <div class="admin-nav-item" onclick="switchPanel('stock',this)"><span class="aicon">📋</span> Stock & Alertes <span class="admin-badge">3</span></div>
+    <div class="admin-nav-item" onclick="switchPanel('promos',this)"><span class="aicon">🏷️</span> Promotions</div>
+    <div class="admin-nav-item" onclick="switchPanel('analytics',this)"><span class="aicon">📈</span> Analytics</div>
+
+    <div class="admin-nav-section">Paramètres</div>
+    <div class="admin-nav-item" onclick="switchPanel('settings',this)"><span class="aicon">⚙️</span> Paramètres</div>
+    <div class="admin-nav-item" onclick="toast('🚪','Déconnexion de l\'admin')"><span class="aicon">🚪</span> Déconnexion</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <!-- DASHBOARD -->
+    <div class="admin-panel active" id="panel-dashboard">
+      <h1 class="admin-page-title">Tableau de bord</h1>
+      <p class="admin-page-sub">Lundi 24 avril 2026 · Dernière mise à jour il y a 3 minutes</p>
+
+      <div class="kpi-grid">
+        <div class="kpi-card green">
+          <div class="kpi-icon">💶</div>
+          <div class="kpi-val">48 290 €</div>
+          <div class="kpi-label">Chiffre d'affaires (ce mois)</div>
+          <div class="kpi-trend up">↑ +23% vs mois dernier</div>
+        </div>
+        <div class="kpi-card gold">
+          <div class="kpi-icon">📦</div>
+          <div class="kpi-val">1 247</div>
+          <div class="kpi-label">Commandes ce mois</div>
+          <div class="kpi-trend up">↑ +18% vs mois dernier</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-icon">👥</div>
+          <div class="kpi-val">342</div>
+          <div class="kpi-label">Nouveaux clients</div>
+          <div class="kpi-trend up">↑ +31% vs mois dernier</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-icon">↩</div>
+          <div class="kpi-val">2.1%</div>
+          <div class="kpi-label">Taux de retour</div>
+          <div class="kpi-trend down">↓ −0.4% vs mois dernier</div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="admin-card">
+          <div class="admin-card-title">Revenus journaliers <span>Avril 2026</span></div>
+          <div class="bar-chart" id="revenue-chart"></div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">Ventes par catégorie <span>Ce mois</span></div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 140 140">
+              <circle cx="70" cy="70" r="52" fill="none" stroke="#243028" stroke-width="20"/>
+              <circle cx="70" cy="70" r="52" fill="none" stroke="#4e7352" stroke-width="20" stroke-dasharray="98 228" stroke-dashoffset="0" transform="rotate(-90 70 70)"/>
+              <circle cx="70" cy="70" r="52" fill="none" stroke="#7a9e7e" stroke-width="20" stroke-dasharray="60 228" stroke-dashoffset="-98" transform="rotate(-90 70 70)"/>
+              <circle cx="70" cy="70" r="52" fill="none" stroke="#b8960c" stroke-width="20" stroke-dasharray="40 228" stroke-dashoffset="-158" transform="rotate(-90 70 70)"/>
+              <circle cx="70" cy="70" r="52" fill="none" stroke="#6b4f2a" stroke-width="20" stroke-dasharray="30 228" stroke-dashoffset="-198" transform="rotate(-90 70 70)"/>
+              <text x="70" y="66" text-anchor="middle" fill="#e8f0e8" font-size="11" font-weight="500">100%</text>
+              <text x="70" y="80" text-anchor="middle" fill="#7a9e7e" font-size="8">vendus</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="donut-item"><span class="donut-dot" style="background:#4e7352"></span><span class="donut-item-label">Huiles essentielles</span><span class="donut-item-val">43%</span></div>
+              <div class="donut-item"><span class="donut-dot" style="background:#7a9e7e"></span><span class="donut-item-label">Tisanes</span><span class="donut-item-val">26%</span></div>
+              <div class="donut-item"><span class="donut-dot" style="background:#b8960c"></span><span class="donut-item-label">Compléments</span><span class="donut-item-val">18%</span></div>
+              <div class="donut-item"><span class="donut-dot" style="background:#6b4f2a"></span><span class="donut-item-label">Beauté & Coffrets</span><span class="donut-item-val">13%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DERNIÈRES COMMANDES -->
+      <div class="admin-card" style="margin-bottom:1.5rem;">
+        <div class="admin-card-title">Dernières commandes <span><button class="btn btn-primary btn-sm" onclick="switchPanel('orders',document.querySelector('.admin-nav-item:nth-child(3)'))">Voir tout</button></span></div>
+        <table class="admin-table">
+          <thead><tr><th>Commande</th><th>Client</th><th>Articles</th><th>Montant</th><th>Statut</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>#NZ-91298</td><td>Sophie Martin</td><td>HE Lavande, Tisane Sereni'nuit</td><td>22,40 €</td><td><span class="status-pill s-processing">En préparation</span></td><td><span class="order-action" onclick="toast('📦','Commande #NZ-91298 marquée expédiée')">Expédier</span></td></tr>
+            <tr><td>#NZ-91297</td><td>Thomas Bernard</td><td>Complexe Immunité ×2</td><td>59,80 €</td><td><span class="status-pill s-shipped">Expédié</span></td><td><span class="order-action" onclick="toast('📋','Détails ouverts')">Détails</span></td></tr>
+            <tr><td>#NZ-91295</td><td>Marie Chevalier</td><td>Coffret Sérénité</td><td>59,90 €</td><td><span class="status-pill s-delivered">Livré</span></td><td><span class="order-action" onclick="toast('🧾','Facture générée')">Facture</span></td></tr>
+            <tr><td>#NZ-91293</td><td>Julie Fontaine</td><td>Sérum Éclat, Rose Musquée</td><td>59,80 €</td><td><span class="status-pill s-delivered">Livré</span></td><td><span class="order-action" onclick="toast('🧾','Facture générée')">Facture</span></td></tr>
+            <tr><td>#NZ-91290</td><td>Pierre Lambert</td><td>HE Tea Tree, Tisane Digestion</td><td>19,80 €</td><td><span class="status-pill s-cancelled">Annulé</span></td><td><span class="order-action" onclick="toast('↩','Remboursement initié')">Rembourser</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COMMANDES -->
+    <div class="admin-panel" id="panel-orders">
+      <h1 class="admin-page-title">Commandes</h1>
+      <p class="admin-page-sub">1 247 commandes ce mois · 7 en attente de traitement</p>
+      <div style="display:flex;gap:10px;margin-bottom:1.25rem;flex-wrap:wrap;">
+        <input type="text" placeholder="🔍 Rechercher une commande..." style="background:var(--admin-surface);border:1px solid var(--admin-border);color:var(--admin-text);padding:8px 14px;border-radius:40px;font-family:var(--font-sans);font-size:0.82rem;outline:none;flex:1;min-width:200px;">
+        <select style="background:var(--admin-surface);border:1px solid var(--admin-border);color:var(--admin-muted);padding:8px 14px;border-radius:40px;font-family:var(--font-sans);font-size:0.8rem;outline:none;cursor:pointer;"><option>Tous les statuts</option><option>En préparation</option><option>Expédié</option><option>Livré</option><option>Annulé</option></select>
+        <button class="btn btn-primary btn-sm" onclick="toast('📤','Export CSV généré')">Exporter CSV</button>
+      </div>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Commande</th><th>Client</th><th>Date</th><th>Articles</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody id="orders-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PRODUITS -->
+    <div class="admin-panel" id="panel-products">
+      <h1 class="admin-page-title">Gestion des produits</h1>
+      <p class="admin-page-sub">200 références actives · 3 en rupture de stock</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px;">
+        <input type="text" placeholder="🔍 Rechercher un produit..." style="background:var(--admin-surface);border:1px solid var(--admin-border);color:var(--admin-text);padding:8px 14px;border-radius:40px;font-family:var(--font-sans);font-size:0.82rem;outline:none;width:280px;">
+        <button class="btn btn-primary btn-sm" onclick="toast('➕','Formulaire nouveau produit ouvert')">+ Ajouter un produit</button>
+      </div>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Produit</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Ventes/mois</th><th>Statut</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>💜 HE Lavande Fine BIO</td><td>Huiles essentielles</td><td>12,90 €</td><td><span style="color:#6abf6a;">142 unités</span></td><td>87 ventes</td><td><span class="status-pill s-delivered">Actif</span></td><td><span class="order-action" onclick="toast('✏️','Édition produit ouverte')">Éditer</span></td></tr>
+            <tr><td>🌙 Tisane Sereni'nuit BIO</td><td>Tisanes</td><td>9,50 €</td><td><span style="color:#6abf6a;">89 unités</span></td><td>64 ventes</td><td><span class="status-pill s-delivered">Actif</span></td><td><span class="order-action" onclick="toast('✏️','Édition produit ouverte')">Éditer</span></td></tr>
+            <tr><td>🛡️ Complexe Immunité</td><td>Compléments</td><td>29,90 €</td><td><span style="color:#d4b040;">12 unités</span></td><td>51 ventes</td><td><span class="status-pill s-processing">Stock faible</span></td><td><span class="order-action" onclick="toast('📋','Réapprovisionnement commandé')">Réappro.</span></td></tr>
+            <tr><td>✨ Sérum Éclat Naturel</td><td>Beauté</td><td>34,90 €</td><td><span style="color:#e88a70;">0 unité</span></td><td>38 ventes</td><td><span class="status-pill s-cancelled">Rupture</span></td><td><span class="order-action" onclick="toast('📋','Fournisseur contacté')">Réappro.</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- STOCK -->
+    <div class="admin-panel" id="panel-stock">
+      <h1 class="admin-page-title">Stock & Alertes</h1>
+      <p class="admin-page-sub">3 alertes de réapprovisionnement · 1 rupture critique</p>
+      <div class="admin-card">
+        <div class="admin-card-title">Niveaux de stock <span>Seuil d'alerte : 15 unités</span></div>
+        <div id="stock-bars"></div>
+      </div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="admin-panel" id="panel-clients">
+      <h1 class="admin-page-title">Clients</h1>
+      <p class="admin-page-sub">12 048 clients actifs · 342 nouveaux ce mois</p>
+      <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="kpi-card green"><div class="kpi-icon">💰</div><div class="kpi-val">38,80 €</div><div class="kpi-label">Panier moyen</div><div class="kpi-trend up">↑ +4% ce mois</div></div>
+        <div class="kpi-card gold"><div class="kpi-icon">🔄</div><div class="kpi-val">68%</div><div class="kpi-label">Taux de réachat</div><div class="kpi-trend up">↑ +6% ce mois</div></div>
+        <div class="kpi-card blue"><div class="kpi-icon">⭐</div><div class="kpi-val">4.9/5</div><div class="kpi-label">Note moyenne</div><div class="kpi-trend up">Stable</div></div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">Meilleurs clients</div>
+        <table class="admin-table">
+          <thead><tr><th>Client</th><th>Commandes</th><th>CA total</th><th>Niveau fidélité</th><th>Dernier achat</th></tr></thead>
+          <tbody>
+            <tr><td>Sophie Martin</td><td>24</td><td>892 €</td><td>💎 Platine</td><td>Aujourd'hui</td></tr>
+            <tr><td>Marie Chevalier</td><td>18</td><td>674 €</td><td>🥇 Gold</td><td>Il y a 3 jours</td></tr>
+            <tr><td>Julie Fontaine</td><td>15</td><td>538 €</td><td>🥇 Gold</td><td>Il y a 1 semaine</td></tr>
+            <tr><td>Thomas Bernard</td><td>12</td><td>411 €</td><td>🥈 Silver</td><td>Il y a 2 jours</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROMOS -->
+    <div class="admin-panel" id="panel-promos">
+      <h1 class="admin-page-title">Promotions & Codes promo</h1>
+      <p class="admin-page-sub">5 codes actifs · 1 campagne en cours</p>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;"><button class="btn btn-primary btn-sm" onclick="toast('➕','Créateur de code promo ouvert')">+ Créer un code</button></div>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Code</th><th>Réduction</th><th>Utilisations</th><th>Expire le</th><th>Statut</th><th></th></tr></thead>
+          <tbody>
+            <tr><td style="font-family:monospace;letter-spacing:0.08em;color:#a8c4a8;">BIENVENUE10</td><td>−10%</td><td>847 / illimité</td><td>Permanent</td><td><span class="status-pill s-delivered">Actif</span></td><td><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></td></tr>
+            <tr><td style="font-family:monospace;letter-spacing:0.08em;color:#a8c4a8;">NATU15</td><td>−15%</td><td>234 / 500</td><td>30/06/2026</td><td><span class="status-pill s-delivered">Actif</span></td><td><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></td></tr>
+            <tr><td style="font-family:monospace;letter-spacing:0.08em;color:#a8c4a8;">FIDELITE20</td><td>−20%</td><td>89 / 200</td><td>31/05/2026</td><td><span class="status-pill s-delivered">Actif</span></td><td><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></td></tr>
+            <tr><td style="font-family:monospace;letter-spacing:0.08em;color:#7a9e7e;">HIVER2025</td><td>−25%</td><td>1 203 / 1 000</td><td>31/01/2026</td><td><span class="status-pill s-cancelled">Expiré</span></td><td><div class="toggle-sw" onclick="this.classList.toggle('on')"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="admin-panel" id="panel-analytics">
+      <h1 class="admin-page-title">Analytics & Performance</h1>
+      <p class="admin-page-sub">Données du mois d'avril 2026</p>
+      <div class="kpi-grid">
+        <div class="kpi-card green"><div class="kpi-icon">👁️</div><div class="kpi-val">84 290</div><div class="kpi-label">Visiteurs uniques</div><div class="kpi-trend up">↑ +34%</div></div>
+        <div class="kpi-card gold"><div class="kpi-icon">🛒</div><div class="kpi-val">3.8%</div><div class="kpi-label">Taux de conversion</div><div class="kpi-trend up">↑ +0.6pts</div></div>
+        <div class="kpi-card blue"><div class="kpi-icon">⏱️</div><div class="kpi-val">4m 23s</div><div class="kpi-label">Durée session moy.</div><div class="kpi-trend up">↑ +18s</div></div>
+        <div class="kpi-card red"><div class="kpi-icon">💨</div><div class="kpi-val">38%</div><div class="kpi-label">Taux de rebond</div><div class="kpi-trend down">↓ −5pts</div></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="admin-panel" id="panel-settings">
+      <h1 class="admin-page-title">Paramètres</h1>
+      <p class="admin-page-sub">Configuration générale de la boutique</p>
+      <div class="admin-card" style="margin-bottom:1rem;">
+        <div class="admin-card-title">Notifications & Alertes</div>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:0.75rem;border-bottom:1px solid var(--admin-border);"><div><div style="font-size:0.84rem;color:var(--admin-text);">Email nouvelles commandes</div><div style="font-size:0.72rem;color:var(--admin-muted);">Recevoir un email à chaque commande</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:0.75rem;border-bottom:1px solid var(--admin-border);"><div><div style="font-size:0.84rem;color:var(--admin-text);">Alertes stock faible</div><div style="font-size:0.72rem;color:var(--admin-muted);">Notification quand stock < 15 unités</div></div><div class="toggle-sw on" onclick="this.classList.toggle('on')"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:0.84rem;color:var(--admin-text);">Rapport hebdomadaire</div><div style="font-size:0.72rem;color:var(--admin-muted);">Synthèse automatique chaque lundi</div></div><div class="toggle-sw" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — BOX MENSUELLE
+══════════════════════════════════════════ -->
+<div class="page" id="page-box">
+  <div class="box-hero">
+    <p class="box-hero-tag">🌿 Natu'box — L'abonnement herbier</p>
+    <h1 class="box-hero-title">La nature livrée<br>chez vous chaque <em>mois</em></h1>
+    <p class="box-hero-sub">Une box de produits naturels soigneusement sélectionnés par nos herboristes experts. Personnalisée selon vos besoins, surprise garantie.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="document.getElementById('plans-section').scrollIntoView({behavior:'smooth'})">Choisir ma box →</button>
+      <button class="btn" style="background:rgba(255,255,255,0.12);color:#fff;border:1.5px solid rgba(255,255,255,0.25);padding:10px 24px;font-size:0.85rem;" onclick="toast('📹','Vidéo de présentation')">▶ Voir une box s'ouvrir</button>
+    </div>
+  </div>
+
+  <div class="plans-section" id="plans-section">
+    <div style="text-align:center;margin-bottom:2.5rem;">
+      <p style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--sage-dark);font-weight:500;margin-bottom:0.5rem;">Nos formules</p>
+      <h2 style="font-family:var(--font-serif);font-size:2.2rem;font-weight:300;color:var(--text-dark);">Choisissez votre <em style="color:var(--sage-dark);font-style:italic;">rythme</em></h2>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-emoji">🌱</div>
+        <div class="plan-name">Découverte</div>
+        <div class="plan-tagline">Parfait pour commencer</div>
+        <div class="plan-price"><sup>€</sup>24<span style="font-size:1rem;">,90</span></div>
+        <div class="plan-period">par mois · sans engagement</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> 3 à 4 produits par box</li>
+          <li><span class="check">✓</span> Valeur garantie 35€+</li>
+          <li><span class="check">✓</span> Fiche conseil herboriste</li>
+          <li><span class="check">✓</span> Livraison 4,90 €</li>
+          <li><span class="cross">✗</span> Personnalisation</li>
+          <li><span class="cross">✗</span> Accès ventes privées</li>
+        </ul>
+        <button class="btn btn-outline" style="width:100%;" onclick="toast('🌱','Abonnement Découverte — étape suivante')">Choisir Découverte</button>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-featured-badge">⭐ Le plus populaire</div>
+        <div class="plan-emoji">🌿</div>
+        <div class="plan-name">Essentielle</div>
+        <div class="plan-tagline">L'équilibre idéal</div>
+        <div class="plan-price"><sup>€</sup>39<span style="font-size:1rem;">,90</span></div>
+        <div class="plan-period">par mois · engagement 3 mois</div>
+        <div class="plan-saving">Économisez 15€ vs achat séparé</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> 5 à 6 produits par box</li>
+          <li><span class="check">✓</span> Valeur garantie 65€+</li>
+          <li><span class="check">✓</span> Box thématique mensuelle</li>
+          <li><span class="check">✓</span> Livraison OFFERTE</li>
+          <li><span class="check">✓</span> Personnalisation partielle</li>
+          <li><span class="check">✓</span> Accès ventes privées</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%;" onclick="toast('🌿','Abonnement Essentielle — configurer ma box')">Choisir Essentielle</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-emoji">💎</div>
+        <div class="plan-name">Prestige</div>
+        <div class="plan-tagline">Le meilleur de la nature</div>
+        <div class="plan-price"><sup>€</sup>69<span style="font-size:1rem;">,90</span></div>
+        <div class="plan-period">par mois · engagement 6 mois</div>
+        <div class="plan-saving">Économisez 40€ vs achat séparé</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> 8 à 10 produits par box</li>
+          <li><span class="check">✓</span> Valeur garantie 120€+</li>
+          <li><span class="check">✓</span> 100% personnalisable</li>
+          <li><span class="check">✓</span> Livraison express offerte</li>
+          <li><span class="check">✓</span> Consultation herboriste 30 min</li>
+          <li><span class="check">✓</span> Produits en exclusivité</li>
+        </ul>
+        <button class="btn btn-outline" style="width:100%;" onclick="toast('💎','Abonnement Prestige — configurer ma box')">Choisir Prestige</button>
+      </div>
+    </div>
+
+    <!-- CONFIGURATEUR -->
+    <div class="box-configurator">
+      <h3 class="config-title">🌿 Configurez votre box idéale</h3>
+      <p class="config-sub">Dites-nous vos préférences — nous adaptons chaque box à votre profil santé.</p>
+      <div class="config-steps">
+        <div class="config-step-tab active" onclick="switchConfig(0,this)">1. Vos besoins</div>
+        <div class="config-step-tab" onclick="switchConfig(1,this)">2. Vos exclusions</div>
+        <div class="config-step-tab" onclick="switchConfig(2,this)">3. Vos produits favoris</div>
+      </div>
+      <div class="config-pane active" id="config-0">
+        <div class="config-opt selected" onclick="this.classList.toggle('selected')"><div class="co-icon">😌</div><div class="co-name">Stress & Sérénité</div><div class="co-desc">Produits apaisants et relaxants</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">😴</div><div class="co-name">Sommeil</div><div class="co-desc">Pour des nuits profondes</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🛡️</div><div class="co-name">Immunité</div><div class="co-desc">Renforcer les défenses</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">⚡</div><div class="co-name">Énergie</div><div class="co-desc">Vitalité et dynamisme</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🌸</div><div class="co-name">Beauté & Peau</div><div class="co-desc">Soin naturel du visage</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🌿</div><div class="co-name">Digestion</div><div class="co-desc">Confort digestif naturel</div></div>
+      </div>
+      <div class="config-pane" id="config-1">
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🥛</div><div class="co-name">Sans lactose</div><div class="co-desc">Exclure les produits laitiers</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🌾</div><div class="co-name">Sans gluten</div><div class="co-desc">Formules sans gluten</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🐝</div><div class="co-name">Sans propolis</div><div class="co-desc">Si allergie aux abeilles</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🌰</div><div class="co-name">Sans noix</div><div class="co-desc">Exclure huiles de noix</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🐟</div><div class="co-name">Vegan strict</div><div class="co-desc">Aucun produit animal</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🤰</div><div class="co-name">Grossesse</div><div class="co-desc">Produits adaptés</div></div>
+      </div>
+      <div class="config-pane" id="config-2">
+        <div class="config-opt selected" onclick="this.classList.toggle('selected')"><div class="co-icon">💜</div><div class="co-name">HE Lavande</div><div class="co-desc">Ma préférée</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🌹</div><div class="co-name">Rose Musquée</div><div class="co-desc">Pour le visage</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🌙</div><div class="co-name">Tisanes du soir</div><div class="co-desc">Mon rituel</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🛡️</div><div class="co-name">Compléments</div><div class="co-desc">En cure régulière</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">✨</div><div class="co-name">Soins visage</div><div class="co-desc">Beauté naturelle</div></div>
+        <div class="config-opt" onclick="this.classList.toggle('selected')"><div class="co-icon">🎁</div><div class="co-name">Surprise !</div><div class="co-desc">J'aime les découvertes</div></div>
+      </div>
+
+      <div class="box-preview">
+        <div class="box-preview-title">📦 Votre prochaine box contiendra probablement…</div>
+        <div class="box-preview-items">
+          <div class="box-item-chip">💜 HE Lavande Fine <span class="box-item-rm" onclick="this.parentElement.remove()">✕</span></div>
+          <div class="box-item-chip">🌙 Tisane Sereni'nuit <span class="box-item-rm" onclick="this.parentElement.remove()">✕</span></div>
+          <div class="box-item-chip">🌿 Macérât Millepertuis <span class="box-item-rm" onclick="this.parentElement.remove()">✕</span></div>
+          <div class="box-item-chip">📖 Guide Stress & Sommeil <span class="box-item-rm" onclick="this.parentElement.remove()">✕</span></div>
+          <div class="box-item-chip">🎁 Produit surprise !</div>
+        </div>
+        <div class="box-preview-footer">
+          <div>
+            <div class="box-preview-price">39,90 € / mois</div>
+            <div class="box-preview-note">Valeur contenu estimée : 68 €</div>
+          </div>
+          <button class="btn btn-primary" onclick="toast('✅','Abonnement configuré ! Redirection paiement...')">Valider ma box → S'abonner</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÉMOIGNAGES -->
+    <h3 style="font-family:var(--font-serif);font-size:1.6rem;font-weight:300;color:var(--text-dark);margin-bottom:1.25rem;">Elles adorent leur Natu'box</h3>
+    <div class="box-testimonials">
+      <div class="box-testi"><div class="box-testi-stars">★★★★★</div><p class="box-testi-text">"Chaque mois c'est la surprise ! La box de novembre avec le thème immunité était parfaite pour l'hiver. Les produits sont d'une qualité que je ne retrouve nulle part ailleurs."</p><div class="box-testi-author">Sophie M. · Abonnée depuis 14 mois</div></div>
+      <div class="box-testi"><div class="box-testi-stars">★★★★★</div><p class="box-testi-text">"La personnalisation est vraiment bluffante. Ils savent exactement ce dont j'ai besoin. La fiche conseil incluse est précieuse — on apprend plein de choses sur les plantes."</p><div class="box-testi-author">Marie C. · Abonnée Prestige · 8 mois</div></div>
+      <div class="box-testi"><div class="box-testi-stars">★★★★★</div><p class="box-testi-text">"J'ai offert la box Essentielle à ma mère pour Noël. Elle est tellement contente qu'elle a pris son propre abonnement ! Le rapport qualité-prix est vraiment excellent."</p><div class="box-testi-author">Julie F. · Cadeau devenu abonnement</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — CHAT IA HERBORISTE
+══════════════════════════════════════════ -->
+<div class="page" id="page-chat">
+  <div class="chat-page">
+    <div class="chat-hero">
+      <div class="chat-hero-icon">🌿</div>
+      <h1 class="chat-hero-title">Votre herboriste <em>virtuelle</em></h1>
+      <p class="chat-hero-sub">Posez toutes vos questions sur les plantes médicinales, les huiles essentielles et le bien-être naturel. Notre IA, entraînée par nos herboristes experts, vous répond en temps réel.</p>
+      <div class="chat-caps">
+        <span class="chat-cap">🔬 Base de 2 000+ plantes</span>
+        <span class="chat-cap">⚡ Réponse en 3 secondes</span>
+        <span class="chat-cap">🛡️ Validé par des herboristes</span>
+        <span class="chat-cap">🔒 Confidentiel</span>
+      </div>
+    </div>
+
+    <div class="chat-topics">
+      <div class="chat-topic" onclick="sendSuggestion('Quels remèdes naturels pour le stress ?')"><div class="ct-icon">😌</div><div class="ct-label">Stress & Anxiété</div><div class="ct-desc">Plantes apaisantes</div></div>
+      <div class="chat-topic" onclick="sendSuggestion('Comment améliorer mon sommeil naturellement ?')"><div class="ct-icon">😴</div><div class="ct-label">Troubles du sommeil</div><div class="ct-desc">Retrouver des nuits sereines</div></div>
+      <div class="chat-topic" onclick="sendSuggestion('Quelle huile essentielle pour renforcer mon immunité ?')"><div class="ct-icon">🛡️</div><div class="ct-label">Immunité</div><div class="ct-desc">Se protéger naturellement</div></div>
+      <div class="chat-topic" onclick="sendSuggestion('Quelles plantes pour améliorer ma digestion ?')"><div class="ct-icon">🌿</div><div class="ct-label">Digestion</div><div class="ct-desc">Confort intestinal</div></div>
+      <div class="chat-topic" onclick="sendSuggestion('Quels soins naturels pour ma peau sensible ?')"><div class="ct-icon">🌸</div><div class="ct-label">Beauté naturelle</div><div class="ct-desc">Soins peau & cheveux</div></div>
+      <div class="chat-topic" onclick="sendSuggestion('Comment utiliser les huiles essentielles en diffusion ?')"><div class="ct-icon">💧</div><div class="ct-label">Guide HE</div><div class="ct-desc">Aromathérapie pratique</div></div>
+    </div>
+
+    <div class="chat-interface">
+      <div class="chat-header">
+        <div class="chat-avatar">🌿</div>
+        <div class="chat-header-info">
+          <div class="chat-header-name">Émilie — Herboriste IA Natu'zone</div>
+          <div class="chat-header-status"><span class="status-dot"></span> En ligne · Répond en quelques secondes</div>
+        </div>
+        <div class="chat-header-badges">
+          <span class="chat-header-badge">Herboriste D.E.</span>
+          <span class="chat-header-badge">2 000+ plantes</span>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg bot">
+          <div class="msg-avatar-row">
+            <div class="msg-bot-avatar">🌿</div>
+            <span style="font-size:0.72rem;color:var(--text-light);font-weight:500;">Émilie</span>
+          </div>
+          <div class="msg-bubble">Bonjour ! Je suis Émilie, votre herboriste virtuelle chez Natu'zone 🌿<br><br>Je suis là pour répondre à toutes vos questions sur les plantes médicinales, les huiles essentielles et le bien-être naturel. Mon savoir repose sur la base de données de nos herboristes experts et plus de 2 000 plantes répertoriées.<br><br>Quelle est votre question du moment ?</div>
+          <div class="msg-time">Il y a 1 min</div>
+        </div>
+      </div>
+
+      <div class="chat-suggestions" id="chat-suggestions">
+        <div class="suggestion-chip" onclick="sendSuggestion(this.textContent)">🌿 Plantes anti-stress</div>
+        <div class="suggestion-chip" onclick="sendSuggestion(this.textContent)">😴 Aide au sommeil</div>
+        <div class="suggestion-chip" onclick="sendSuggestion(this.textContent)">💧 Huiles essentielles débutant</div>
+        <div class="suggestion-chip" onclick="sendSuggestion(this.textContent)">🛡️ Booster l'immunité</div>
+        <div class="suggestion-chip" onclick="sendSuggestion(this.textContent)">🍵 Tisanes digestives</div>
+      </div>
+
+      <div class="chat-input-zone">
+        <textarea class="chat-textarea" id="chat-input" placeholder="Posez votre question à Émilie…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+        <button class="btn-send" onclick="sendMessage()">➤</button>
+      </div>
+      <div class="chat-disclaimer">⚕️ Conseil informatif uniquement — ne remplace pas un avis médical. Consultez un professionnel de santé pour tout problème médical.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 4 — SEO & VISIBILITÉ
+══════════════════════════════════════════ -->
+<div class="page" id="page-seo">
+  <div class="seo-page">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <p style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--sage-dark);font-weight:500;margin-bottom:0.5rem;">📈 Référencement naturel</p>
+      <h1 style="font-family:var(--font-serif);font-size:2rem;font-weight:300;color:var(--text-dark);margin-bottom:0.4rem;">Stratégie <em style="color:var(--sage-dark);font-style:italic;">SEO</em> Natu'zone</h1>
+      <p style="font-size:0.88rem;color:var(--text-mid);font-weight:300;">Audit complet et plan d'action pour dominer Google sur les requêtes herboristerie</p>
+    </div>
+
+    <div class="seo-score-card">
+      <div class="seo-score-num" id="seo-score">78</div>
+      <div class="seo-score-label">Score SEO global / 100</div>
+      <div class="seo-score-bar"><div class="seo-score-fill" style="width:78%"></div></div>
+      <div style="display:flex;gap:2rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-size:1.2rem;font-weight:600;">92</div><div style="font-size:0.72rem;opacity:0.7;">Technique</div></div>
+        <div style="text-align:center;"><div style="font-size:1.2rem;font-weight:600;">84</div><div style="font-size:0.72rem;opacity:0.7;">Contenu</div></div>
+        <div style="text-align:center;"><div style="font-size:1.2rem;font-weight:600;">71</div><div style="font-size:0.72rem;opacity:0.7;">Backlinks</div></div>
+        <div style="text-align:center;"><div style="font-size:1.2rem;font-weight:600;">65</div><div style="font-size:0.72rem;opacity:0.7;">Mobile</div></div>
+      </div>
+    </div>
+
+    <div class="seo-grid">
+      <div class="seo-card">
+        <div class="seo-card-title">✅ Points forts</div>
+        <div class="seo-check-list">
+          <div class="seo-check-item"><span class="seo-check-icon">✅</span><div class="seo-check-text"><strong>Balises Title & Meta Description</strong>Optimisées pour les mots-clés principaux</div><span class="seo-check-status status-ok">OK</span></div>
+          <div class="seo-check-item"><span class="seo-check-icon">✅</span><div class="seo-check-text"><strong>Schema.org LocalBusiness</strong>Données structurées présentes et valides</div><span class="seo-check-status status-ok">OK</span></div>
+          <div class="seo-check-item"><span class="seo-check-icon">✅</span><div class="seo-check-text"><strong>Open Graph & Twitter Cards</strong>Partage réseaux sociaux optimisé</div><span class="seo-check-status status-ok">OK</span></div>
+          <div class="seo-check-item"><span class="seo-check-icon">✅</span><div class="seo-check-text"><strong>HTTPS & SSL</strong>Connexion sécurisée SSL 256 bits</div><span class="seo-check-status status-ok">OK</span></div>
+          <div class="seo-check-item"><span class="seo-check-icon">⚠️</span><div class="seo-check-text"><strong>Images sans attribut ALT</strong>34 images manquent la balise alt</div><span class="seo-check-status status-warn">À corriger</span></div>
+          <div class="seo-check-item"><span class="seo-check-icon">❌</span><div class="seo-check-text"><strong>Core Web Vitals — LCP</strong>LCP à 3.2s · objectif < 2.5s</div><span class="seo-check-status status-err">Critique</span></div>
+        </div>
+      </div>
+
+      <div class="seo-card">
+        <div class="seo-card-title">🎯 Mots-clés cibles prioritaires</div>
+        <table class="keyword-table">
+          <thead><tr><th>Mot-clé</th><th>Volume</th><th>Difficulté</th><th>Position</th></tr></thead>
+          <tbody>
+            <tr><td>herboristerie en ligne</td><td><div class="vol-bar"><div class="vol-fill" style="width:90%"></div></div></td><td><span class="diff-badge diff-high">Élevé</span></td><td>12</td></tr>
+            <tr><td>huile essentielle bio</td><td><div class="vol-bar"><div class="vol-fill" style="width:85%"></div></div></td><td><span class="diff-badge diff-high">Élevé</span></td><td>8</td></tr>
+            <tr><td>tisane sommeil naturel</td><td><div class="vol-bar"><div class="vol-fill" style="width:65%"></div></div></td><td><span class="diff-badge diff-med">Moyen</span></td><td>4</td></tr>
+            <tr><td>plantes médicinales bio</td><td><div class="vol-bar"><div class="vol-fill" style="width:70%"></div></div></td><td><span class="diff-badge diff-med">Moyen</span></td><td>6</td></tr>
+            <tr><td>complément naturel immunité</td><td><div class="vol-bar"><div class="vol-fill" style="width:55%"></div></div></td><td><span class="diff-badge diff-low">Faible</span></td><td>2</td></tr>
+            <tr><td>phytothérapie stress anxiété</td><td><div class="vol-bar"><div class="vol-fill" style="width:50%"></div></div></td><td><span class="diff-badge diff-low">Faible</span></td><td>3</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="seo-card">
+        <div class="seo-card-title">📋 Plan d'action 90 jours</div>
+        <div class="seo-check-list">
+          <div class="seo-check-item"><span class="seo-check-icon">1️⃣</span><div class="seo-check-text"><strong>Optimiser LCP (J1–J7)</strong>Compresser images, activer lazy loading, CDN</div><span class="seo-check-status status-err">Urgent</span></div>
+          <div class="seo-check-item"><span class="seo-check-icon">2️⃣</span><div class="seo-check-text"><strong>Balises ALT images (J7–J14)</strong>Ajouter alt text descriptif aux 34 images</div><span class="seo-check-status status-warn">Important</span></div>
+          <div class="seo-check-item"><span class="seo-check-icon">3️⃣</span><div class="seo-check-text"><strong>Blog — 8 articles (J1–J30)</strong>Cibler les mots-clés longue traîne du blog</div><span class="seo-check-status status-warn">Important</span></div>
+          <div class="seo-check-item"><span class="seo-check-icon">4️⃣</span><div class="seo-check-text"><strong>Pages catégories enrichies (J30–J60)</strong>Texte SEO de 300+ mots par catégorie</div><span class="seo-check-status status-ok">Planifié</span></div>
+          <div class="seo-check-item"><span class="seo-check-icon">5️⃣</span><div class="seo-check-text"><strong>Link building (J30–J90)</strong>Partenariats blogs bien-être & santé naturelle</div><span class="seo-check-status status-ok">Planifié</span></div>
+        </div>
+      </div>
+
+      <div class="seo-card">
+        <div class="seo-card-title">🗺️ Sitemap recommandé</div>
+        <div class="sitemap-tree"><span class="sitemap-url">natuzone.fr/</span>                   <span class="sitemap-prio">prio: 1.0</span>
+<span class="sitemap-url">natuzone.fr/boutique/</span>            <span class="sitemap-prio">prio: 0.9</span>
+  <span class="sitemap-url">├ /huiles-essentielles/</span>         <span class="sitemap-prio">prio: 0.8</span>
+  <span class="sitemap-url">├ /tisanes-infusions/</span>           <span class="sitemap-prio">prio: 0.8</span>
+  <span class="sitemap-url">├ /plantes-medicinales/</span>         <span class="sitemap-prio">prio: 0.8</span>
+  <span class="sitemap-url">├ /complements-naturels/</span>        <span class="sitemap-prio">prio: 0.8</span>
+  <span class="sitemap-url">└ /beaute-naturelle/</span>            <span class="sitemap-prio">prio: 0.8</span>
+<span class="sitemap-url">natuzone.fr/blog/</span>                <span class="sitemap-prio">prio: 0.7</span>
+<span class="sitemap-url">natuzone.fr/notre-histoire/</span>      <span class="sitemap-prio">prio: 0.6</span>
+<span class="sitemap-url">natuzone.fr/contact/</span>             <span class="sitemap-prio">prio: 0.5</span></div>
+        <button class="btn btn-outline btn-sm" style="margin-top:1rem;" onclick="toast('📄','Sitemap XML généré et téléchargé')">Télécharger sitemap.xml</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ══════ NAVIGATION ══════ */
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══════ ADMIN ══════ */
+function switchPanel(id, el) {
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+/* Bar chart revenus */
+(function buildChart() {
+  const vals = [1420,1890,1230,2100,1780,2450,1960,2800,2100,1650,2300,3100,2750,1980,2200,3400,2900,1800,2600,3200,2100,2850,3100,2400];
+  const max = Math.max(...vals);
+  const colors = ['#4e7352','#6a9f70','#4e7352','#7ab87e','#4e7352','#5a8f5a'];
+  const chart = document.getElementById('revenue-chart');
+  if (!chart) return;
+  chart.innerHTML = vals.map((v,i) => `
+    <div class="bar-wrap">
+      <div class="bar-val" style="color:rgba(232,240,232,0.7);font-size:0.55rem;">${Math.round(v/100)/10}k</div>
+      <div class="bar" style="height:${Math.round(v/max*100)}%;background:${colors[i%colors.length]};opacity:${0.6+0.4*(v/max)}" title="${v}€"></div>
+      <div class="bar-label">${i+1}</div>
+    </div>`).join('');
+})();
+
+/* Stock bars */
+(function buildStock() {
+  const stocks = [
+    {name:'HE Lavande Fine',qty:142,max:200,col:'#4e7352'},
+    {name:'Tisane Sereni\'nuit',qty:89,max:200,col:'#6a9f70'},
+    {name:'HE Tea Tree',qty:67,max:200,col:'#4e7352'},
+    {name:'Complexe Immunité',qty:12,max:200,col:'#b8960c'},
+    {name:'Rose Musquée BIO',qty:34,max:200,col:'#4e7352'},
+    {name:'Sérum Éclat',qty:0,max:200,col:'#c94a30'},
+    {name:'Tisane Digestion',qty:8,max:200,col:'#b8960c'},
+    {name:'Coffret Sérénité',qty:45,max:200,col:'#4e7352'},
+  ];
+  const el = document.getElementById('stock-bars');
+  if (!el) return;
+  el.innerHTML = stocks.map(s => `
+    <div class="stock-item">
+      <div class="stock-name">${s.name}</div>
+      <div class="stock-bar-track"><div class="stock-bar-fill" style="width:${s.qty/s.max*100}%;background:${s.col};"></div></div>
+      <div class="stock-qty">${s.qty} u.${s.qty < 15 ? '<span class="stock-alert">⚠️</span>':''}</div>
+    </div>`).join('');
+})();
+
+/* Orders table */
+(function buildOrders() {
+  const orders = [
+    ['#NZ-91298','Sophie M.','22/04/2026','HE Lavande, Tisane','22,40 €','processing'],
+    ['#NZ-91297','Thomas B.','22/04/2026','Complexe Immunité ×2','59,80 €','shipped'],
+    ['#NZ-91295','Marie C.','21/04/2026','Coffret Sérénité','59,90 €','delivered'],
+    ['#NZ-91293','Julie F.','21/04/2026','Sérum Éclat, Rose M.','59,80 €','delivered'],
+    ['#NZ-91290','Pierre L.','20/04/2026','HE Tea Tree, Tisane','19,80 €','cancelled'],
+    ['#NZ-91287','Anne R.','20/04/2026','Complexe Immunité','29,90 €','delivered'],
+    ['#NZ-91284','Paul D.','19/04/2026','Coffret Bien-être','59,90 €','shipped'],
+  ];
+  const map = {processing:'s-processing',shipped:'s-shipped',delivered:'s-delivered',cancelled:'s-cancelled'};
+  const lbl = {processing:'En préparation',shipped:'Expédié',delivered:'Livré',cancelled:'Annulé'};
+  const el = document.getElementById('orders-table-body');
+  if (!el) return;
+  el.innerHTML = orders.map(o => `<tr><td>${o[0]}</td><td>${o[1]}</td><td>${o[2]}</td><td>${o[3]}</td><td>${o[4]}</td><td><span class="status-pill ${map[o[5]]}">${lbl[o[5]]}</span></td><td><span class="order-action" onclick="toast('📋','Détails ${o[0]}')">Voir</span></td></tr>`).join('');
+})();
+
+/* ══════ BOX ══════ */
+function switchConfig(idx, el) {
+  document.querySelectorAll('.config-step-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.config-pane').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('config-' + idx).classList.add('active');
+}
+
+/* ══════ CHAT IA ══════ */
+const botResponses = {
+  'stress': {
+    text: "Pour le stress et l'anxiété, je recommande particulièrement :\n\n🌿 **Valériane** (Valeriana officinalis) — la reine des plantes sédatives. En tisane le soir, elle apaise le système nerveux en 20-30 min.\n\n💜 **HE Lavande fine** (Lavandula angustifolia) — 2 gouttes sur les poignets ou en diffusion. Action quasi-immédiate sur l'anxiété.\n\n🍃 **Mélisse** (Melissa officinalis) — en infusion 2x/jour. Particulièrement efficace sur les tensions digestives liées au stress.",
+    product: {emoji:'💜',name:'HE Lavande Fine BIO',price:'12,90 €',bg:'linear-gradient(135deg,#e8e0f0,#c8b8e8)'}
+  },
+  'sommeil': {
+    text: "Pour améliorer votre sommeil naturellement, voici mon protocole :\n\n🌙 **Valériane + Passiflore** en tisane — à boire 30 min avant le coucher. La combinaison est plus efficace que chaque plante seule.\n\n💜 **HE Lavande fine** en diffusion pendant 1h avant le sommeil — réduit le temps d'endormissement de 30%.\n\n🍃 **Tilleul** (Tilia tomentosa) — un grand classique doux et sans effets secondaires, idéal pour les enfants aussi.",
+    product: {emoji:'🌙',name:'Tisane Sereni\'nuit BIO',price:'9,50 €',bg:'linear-gradient(135deg,#e0ddf8,#b8b4e8)'}
+  },
+  'immunité': {
+    text: "Pour renforcer votre immunité, voici les plantes les plus validées scientifiquement :\n\n🛡️ **Échinacée** (Echinacea purpurea) — stimule les défenses en cure de 3 semaines. À démarrer dès l'automne.\n\n🍯 **Propolis** — antibactérienne et antivirale naturelle. En spray ou gélules.\n\n🍋 **Acérola** — source naturelle de vitamine C (17%), bien plus assimilable que la vitamine synthétique.",
+    product: {emoji:'🛡️',name:'Complexe Immunité Forte',price:'29,90 €',bg:'linear-gradient(135deg,#e0f0f8,#b8d8f0)'}
+  },
+  'digestion': {
+    text: "Pour votre confort digestif naturel :\n\n🍵 **Menthe poivrée** — en tisane après les repas. Réduit les ballonnements en 15 min. Attention : déconseillée en cas de reflux.\n\n🌿 **Fenouil** (Foeniculum vulgare) — anti-flatulences naturel, idéal pour les enfants.\n\n🫚 **Gingembre** — stimule la digestion et combat les nausées. En infusion avec une tranche de citron.",
+    product: {emoji:'🍵',name:'Tisane Digestion & Confort',price:'8,90 €',bg:'linear-gradient(135deg,#e8f8e8,#c0e8c0)'}
+  },
+  'default': {
+    text: "Excellente question ! En phytothérapie, chaque plante a ses spécificités. Pour vous donner le conseil le plus précis, j'aurais besoin d'en savoir un peu plus sur :\n\n• Votre objectif principal (stress, sommeil, immunité, digestion, énergie, beauté ?)\n• Votre sensibilité et éventuelles allergies\n• Si vous prenez des médicaments (certaines plantes peuvent interagir)\n\nQuelle est votre priorité du moment ?",
+    product: null
+  },
+  'huile': {
+    text: "Les huiles essentielles sont de formidables alliées, mais quelques règles de base sont essentielles :\n\n💧 **Règle d'or** : ne jamais appliquer une HE pure sur la peau (sauf lavande fine et tea tree en ponctuel). Toujours diluer dans une huile végétale (5% max).\n\n🌬️ **En diffusion** : 5-8 gouttes, 30 min max, 3x/jour. Aérer la pièce entre chaque session.\n\n🤰 **Contre-indications** : femmes enceintes, enfants < 3 ans, épileptiques — toujours vérifier fiche produit.\n\nQuelle HE vous intéresse en particulier ?",
+    product: {emoji:'💜',name:'HE Lavande Fine BIO',price:'12,90 €',bg:'linear-gradient(135deg,#e8e0f0,#c8b8e8)'}
+  }
+};
+
+function detectIntent(msg) {
+  const m = msg.toLowerCase();
+  if (m.includes('stress') || m.includes('anxiété') || m.includes('anxiete') || m.includes('calme') || m.includes('sérén')) return 'stress';
+  if (m.includes('sommeil') || m.includes('dormir') || m.includes('nuit') || m.includes('insomn')) return 'sommeil';
+  if (m.includes('immunit') || m.includes('défense') || m.includes('rhume') || m.includes('grippe')) return 'immunité';
+  if (m.includes('digest') || m.includes('ventre') || m.includes('ballonnement') || m.includes('intestin')) return 'digestion';
+  if (m.includes('huile essential') || m.includes('he ') || m.includes('diffusion') || m.includes('aromathér')) return 'huile';
+  return 'default';
+}
+
+function addMsg(text, role, product) {
+  const el = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const formatted = text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  let html = '';
+  if (role === 'bot') {
+    html += `<div class="msg-avatar-row"><div class="msg-bot-avatar">🌿</div><span style="font-size:0.72rem;color:var(--text-light);font-weight:500;">Émilie</span></div>`;
+  }
+  html += `<div class="msg-bubble">${formatted}</div>`;
+  if (product) {
+    html += `<div class="chat-product-card"><div class="chat-product-img" style="background:${product.bg}">${product.emoji}</div><div><div class="chat-product-name">${product.name}</div><div class="chat-product-price">${product.price}</div><button class="chat-product-btn" onclick="toast('🛒','${product.name} ajouté au panier !')">+ Ajouter au panier</button></div></div>`;
+  }
+  html += `<div class="msg-time">À l'instant</div>`;
+  div.innerHTML = html;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+function addTyping() {
+  const el = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'typing-indicator';
+  div.innerHTML = `<div class="msg-avatar-row"><div class="msg-bot-avatar">🌿</div></div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+function sendMessage() {
+  const inp = document.getElementById('chat-input');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  addMsg(msg, 'user', null);
+  inp.value = '';
+  addTyping();
+  const intent = detectIntent(msg);
+  const resp = botResponses[intent];
+  setTimeout(() => {
+    removeTyping();
+    addMsg(resp.text, 'bot', resp.product);
+  }, 1200 + Math.random() * 800);
+}
+
+function sendSuggestion(text) {
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+/* ══════ TOAST ══════ */
+let tTimer;
+function toast(icon, msg) {
+  clearTimeout(tTimer);
+  document.getElementById('t-icon').textContent = icon;
+  document.getElementById('t-msg').textContent = msg;
+  document.getElementById('toast').classList.add('show');
+  tTimer = setTimeout(() => document.getElementById('toast').classList.remove('show'), 3200);
+}
+
+/* Animer score SEO */
+setTimeout(() => {
+  const fill = document.querySelector('.seo-score-fill');
+  if (fill) fill.style.width = '78%';
+}, 400);
+</script>
+</body>
+</html>

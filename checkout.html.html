@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natu'zone – Checkout & Conversion Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage: #7a9e7e;
+  --sage-light: #a8c4a8;
+  --sage-dark: #4e7352;
+  --beige: #f5f0e8;
+  --beige-mid: #e8e0d0;
+  --beige-dark: #c8b89a;
+  --cream: #fdfaf4;
+  --brown: #6b4f2a;
+  --text-dark: #2a2318;
+  --text-mid: #5c4f3a;
+  --text-light: #8a7a65;
+  --white: #ffffff;
+  --green-pale: #e8f0e8;
+  --gold: #b8960c;
+  --red: #c94a30;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'DM Sans', sans-serif;
+  --radius: 14px;
+  --radius-sm: 7px;
+  --shadow: 0 4px 24px rgba(74,63,42,0.09);
+  --shadow-lg: 0 12px 50px rgba(74,63,42,0.18);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--cream);
+  color: var(--text-dark);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════
+   BANDEAU PROMO ANIMÉ
+══════════════════════════════════════ */
+.promo-bar {
+  background: var(--sage-dark);
+  color: white;
+  padding: 10px 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 200;
+}
+.promo-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+.promo-track:hover { animation-play-state: paused; }
+.promo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 3rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+.promo-item strong { font-weight: 600; }
+.promo-sep {
+  color: rgba(255,255,255,0.3);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.promo-code {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ══════════════════════════════════════
+   NAVBAR (reprise du site principal)
+══════════════════════════════════════ */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(253,250,244,0.97);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--beige-mid);
+  padding: 0 2.5rem;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--font-serif);
+  font-size: 1.6rem; font-weight: 600;
+  color: var(--sage-dark); text-decoration: none;
+  display: flex; align-items: center; gap: 7px;
+}
+.nav-logo span { color: var(--brown); }
+.nav-secure {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; color: var(--text-light);
+}
+.nav-secure svg { color: var(--sage); }
+
+/* ══════════════════════════════════════
+   ÉTAPES CHECKOUT (STEPS)
+══════════════════════════════════════ */
+.steps-bar {
+  background: var(--beige);
+  border-bottom: 1px solid var(--beige-mid);
+  padding: 14px 2.5rem;
+}
+.steps-inner {
+  max-width: 900px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  gap: 0;
+}
+.step-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.82rem; font-weight: 400;
+  color: var(--text-light);
+  padding: 0 1.5rem;
+  position: relative;
+}
+.step-item.active { color: var(--sage-dark); font-weight: 500; }
+.step-item.done { color: var(--sage); }
+.step-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1.5px solid var(--beige-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 500;
+  background: white; flex-shrink: 0;
+}
+.step-item.active .step-num { background: var(--sage-dark); border-color: var(--sage-dark); color: white; }
+.step-item.done .step-num { background: var(--sage); border-color: var(--sage); color: white; font-size: 0.8rem; }
+.step-line { flex: 1; height: 1px; background: var(--beige-dark); min-width: 40px; }
+
+/* ══════════════════════════════════════
+   LAYOUT CHECKOUT
+══════════════════════════════════════ */
+.checkout-layout {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 400px;
+  gap: 2.5rem;
+  padding: 2.5rem 2rem 4rem;
+  align-items: start;
+}
+.checkout-left { display: flex; flex-direction: column; gap: 1.5rem; }
+.checkout-right { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 1.25rem; }
+
+/* ══════════════════════════════════════
+   BLOCS FORMULAIRE
+══════════════════════════════════════ */
+.form-block {
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--beige-mid);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.form-block-header {
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--beige);
+  display: flex; align-items: center; gap: 10px;
+}
+.block-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--sage-dark); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem; font-weight: 600; flex-shrink: 0;
+}
+.form-block-header h3 {
+  font-family: var(--font-serif);
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-dark);
+}
+.form-block-header .edit-link {
+  margin-left: auto; font-size: 0.78rem; color: var(--sage);
+  cursor: pointer; text-decoration: underline;
+}
+.form-body { padding: 1.5rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+label {
+  font-size: 0.75rem; font-weight: 500;
+  color: var(--text-mid); letter-spacing: 0.04em;
+}
+.form-input {
+  padding: 10px 14px;
+  border: 1.5px solid var(--beige-dark);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.88rem;
+  color: var(--text-dark); background: var(--cream);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none; width: 100%;
+}
+.form-input:focus { border-color: var(--sage); box-shadow: 0 0 0 3px rgba(122,158,126,0.15); }
+.form-input::placeholder { color: var(--text-light); font-weight: 300; }
+.form-input.valid { border-color: var(--sage); }
+.form-input.error { border-color: var(--red); }
+select.form-input { cursor: pointer; }
+
+/* ══════════════════════════════════════
+   LIVRAISON OPTIONS
+══════════════════════════════════════ */
+.delivery-options { display: flex; flex-direction: column; gap: 0.75rem; }
+.delivery-opt {
+  border: 1.5px solid var(--beige-dark);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 14px;
+  transition: all 0.2s;
+  position: relative;
+}
+.delivery-opt:hover { border-color: var(--sage-light); }
+.delivery-opt.selected { border-color: var(--sage-dark); background: var(--green-pale); }
+.delivery-radio {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--beige-dark);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.2s;
+}
+.delivery-opt.selected .delivery-radio {
+  border-color: var(--sage-dark); background: var(--sage-dark);
+}
+.delivery-radio-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: white; opacity: 0;
+  transition: opacity 0.15s;
+}
+.delivery-opt.selected .delivery-radio-dot { opacity: 1; }
+.delivery-info { flex: 1; }
+.delivery-name { font-weight: 500; font-size: 0.88rem; color: var(--text-dark); }
+.delivery-desc { font-size: 0.75rem; color: var(--text-light); margin-top: 2px; }
+.delivery-price {
+  font-family: var(--font-serif);
+  font-size: 1rem; font-weight: 600;
+  color: var(--text-dark);
+}
+.delivery-price.free { color: var(--sage-dark); font-size: 0.85rem; font-family: var(--font-sans); font-weight: 500; }
+.delivery-badge {
+  position: absolute; top: -8px; right: 12px;
+  background: var(--sage-dark); color: white;
+  font-size: 0.65rem; font-weight: 500; letter-spacing: 0.06em;
+  padding: 2px 8px; border-radius: 10px;
+}
+
+/* ══════════════════════════════════════
+   PAIEMENT
+══════════════════════════════════════ */
+.payment-methods { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.pay-method {
+  flex: 1; min-width: 80px;
+  border: 1.5px solid var(--beige-dark);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  cursor: pointer; transition: all 0.2s;
+  font-size: 0.72rem; color: var(--text-light); font-weight: 400;
+  text-align: center;
+}
+.pay-method .pay-icon { font-size: 1.3rem; }
+.pay-method:hover { border-color: var(--sage-light); }
+.pay-method.selected { border-color: var(--sage-dark); background: var(--green-pale); color: var(--sage-dark); font-weight: 500; }
+
+.card-fields { display: flex; flex-direction: column; gap: 1rem; }
+.card-num-wrap {
+  position: relative;
+}
+.card-icons {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  display: flex; gap: 4px;
+}
+.card-icon-sm {
+  background: var(--beige-mid); border-radius: 3px;
+  padding: 2px 5px; font-size: 0.6rem; font-weight: 600;
+  color: var(--text-mid);
+}
+
+/* ══════════════════════════════════════
+   RÉCAP COMMANDE (droite)
+══════════════════════════════════════ */
+.recap-block {
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--beige-mid);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.recap-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--beige);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.recap-header h3 { font-family: var(--font-serif); font-size: 1rem; font-weight: 400; }
+.recap-toggle { font-size: 0.75rem; color: var(--sage); cursor: pointer; text-decoration: underline; }
+.recap-items { padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.recap-item { display: flex; gap: 12px; align-items: center; }
+.recap-img {
+  width: 54px; height: 54px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; flex-shrink: 0; position: relative;
+}
+.recap-qty-badge {
+  position: absolute; top: -6px; right: -6px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--sage-dark); color: white;
+  font-size: 0.62rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+}
+.recap-item-name { font-size: 0.85rem; font-weight: 500; color: var(--text-dark); margin-bottom: 2px; }
+.recap-item-var { font-size: 0.72rem; color: var(--text-light); }
+.recap-item-price { font-family: var(--font-serif); font-size: 0.95rem; font-weight: 600; margin-left: auto; flex-shrink: 0; }
+
+.recap-divider { height: 1px; background: var(--beige); margin: 0 1.25rem; }
+
+.coupon-row {
+  padding: 1rem 1.25rem;
+  display: flex; gap: 8px;
+}
+.coupon-input {
+  flex: 1; padding: 9px 14px;
+  border: 1.5px solid var(--beige-dark); border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.82rem;
+  background: var(--cream); color: var(--text-dark); outline: none;
+  transition: border-color 0.2s;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.coupon-input:focus { border-color: var(--sage); }
+.btn-coupon {
+  background: var(--sage-dark); color: white;
+  border: none; border-radius: var(--radius-sm);
+  padding: 9px 16px; font-size: 0.8rem; font-weight: 500;
+  cursor: pointer; font-family: var(--font-sans);
+  transition: background 0.2s; white-space: nowrap;
+}
+.btn-coupon:hover { background: var(--sage); }
+
+.coupon-success {
+  padding: 8px 1.25rem;
+  font-size: 0.78rem; color: var(--sage-dark);
+  display: none; align-items: center; gap: 6px;
+  background: var(--green-pale);
+}
+
+.totals { padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 8px; }
+.total-row { display: flex; justify-content: space-between; font-size: 0.85rem; }
+.total-row .label { color: var(--text-mid); }
+.total-row .val { font-weight: 500; color: var(--text-dark); }
+.total-row.free .val { color: var(--sage-dark); font-weight: 500; }
+.total-row.promo .val { color: var(--red); }
+.total-row.grand { font-size: 1rem; font-weight: 500; border-top: 1px solid var(--beige-mid); padding-top: 8px; margin-top: 4px; }
+.total-row.grand .val { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; }
+
+/* ══════════════════════════════════════
+   BOUTON CTA CHECKOUT
+══════════════════════════════════════ */
+.btn-checkout {
+  width: 100%;
+  background: var(--sage-dark);
+  color: white;
+  border: none; border-radius: 40px;
+  padding: 16px 28px;
+  font-family: var(--font-sans); font-size: 0.95rem; font-weight: 500;
+  cursor: pointer; transition: all 0.25s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: 0 4px 20px rgba(78,115,82,0.28);
+}
+.btn-checkout:hover { background: var(--sage); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(78,115,82,0.35); }
+.btn-checkout:active { transform: translateY(0); }
+.btn-checkout.loading { opacity: 0.75; pointer-events: none; }
+
+.secure-badges {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 1rem 1.25rem 1.25rem;
+}
+.secure-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; font-size: 0.72rem; color: var(--text-light);
+}
+.secure-icons { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+.secure-icon {
+  background: var(--beige); border: 1px solid var(--beige-mid);
+  border-radius: 4px; padding: 3px 8px;
+  font-size: 0.65rem; color: var(--text-mid); font-weight: 500; letter-spacing: 0.04em;
+}
+
+/* ══════════════════════════════════════
+   UPSELL / PRODUITS COMPLÉMENTAIRES
+══════════════════════════════════════ */
+.upsell-block {
+  background: linear-gradient(135deg, #f0f7f0, #f8f4ec);
+  border-radius: var(--radius);
+  border: 1px solid rgba(122,158,126,0.2);
+  padding: 1.25rem;
+}
+.upsell-title {
+  font-family: var(--font-serif);
+  font-size: 0.95rem; font-weight: 400;
+  color: var(--text-dark); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.upsell-items { display: flex; flex-direction: column; gap: 0.6rem; }
+.upsell-item {
+  background: white; border-radius: var(--radius-sm);
+  border: 1px solid var(--beige-mid);
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+  transition: all 0.2s;
+}
+.upsell-emoji { font-size: 1.5rem; flex-shrink: 0; }
+.upsell-info { flex: 1; }
+.upsell-name { font-size: 0.82rem; font-weight: 500; color: var(--text-dark); }
+.upsell-benefit { font-size: 0.72rem; color: var(--text-light); margin-top: 1px; }
+.upsell-price-col { text-align: right; flex-shrink: 0; }
+.upsell-price { font-family: var(--font-serif); font-size: 0.95rem; font-weight: 600; color: var(--text-dark); }
+.btn-upsell-add {
+  background: var(--sage-dark); color: white;
+  border: none; border-radius: 40px;
+  padding: 5px 12px; font-size: 0.72rem; font-weight: 500;
+  cursor: pointer; font-family: var(--font-sans);
+  transition: all 0.2s; margin-top: 3px; white-space: nowrap;
+}
+.btn-upsell-add:hover { background: var(--sage); }
+.btn-upsell-add.added { background: var(--beige-dark); color: var(--text-mid); pointer-events: none; }
+
+/* ══════════════════════════════════════
+   TIMER URGENCE
+══════════════════════════════════════ */
+.urgency-block {
+  background: #fff8f0;
+  border: 1.5px solid #e8c090;
+  border-radius: var(--radius-sm);
+  padding: 12px 1.25rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.urgency-icon { font-size: 1.1rem; flex-shrink: 0; }
+.urgency-text { font-size: 0.78rem; color: #6b4020; line-height: 1.4; flex: 1; }
+.urgency-timer {
+  font-family: var(--font-serif);
+  font-size: 1.1rem; font-weight: 600;
+  color: var(--red); flex-shrink: 0;
+  min-width: 52px; text-align: center;
+  background: white; border-radius: 6px;
+  padding: 4px 8px; border: 1px solid #e8c090;
+}
+
+/* ══════════════════════════════════════
+   TRUST LIST
+══════════════════════════════════════ */
+.trust-list { display: flex; flex-direction: column; gap: 6px; }
+.trust-list-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.78rem; color: var(--text-mid);
+}
+.trust-list-item .icon { font-size: 0.9rem; }
+
+/* ══════════════════════════════════════
+   CONFIRMATION PAGE
+══════════════════════════════════════ */
+.confirm-page {
+  display: none;
+  min-height: 80vh;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
+.confirm-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid var(--beige-mid);
+  box-shadow: var(--shadow-lg);
+  padding: 3.5rem;
+  max-width: 620px;
+  width: 100%;
+  text-align: center;
+}
+.confirm-anim {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.2rem;
+  margin: 0 auto 1.5rem;
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.confirm-order-num {
+  font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--sage-dark); font-weight: 500; margin-bottom: 0.5rem;
+}
+.confirm-title {
+  font-family: var(--font-serif);
+  font-size: 2rem; font-weight: 300;
+  color: var(--text-dark); margin-bottom: 0.75rem; line-height: 1.2;
+}
+.confirm-title em { color: var(--sage-dark); font-style: italic; }
+.confirm-sub {
+  font-size: 0.9rem; color: var(--text-mid);
+  line-height: 1.7; font-weight: 300; margin-bottom: 2rem;
+}
+.confirm-steps-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  margin-bottom: 2rem;
+}
+.confirm-step {
+  padding: 1rem;
+  background: var(--beige);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+.confirm-step .step-icon { font-size: 1.4rem; margin-bottom: 6px; }
+.confirm-step p { font-size: 0.75rem; color: var(--text-mid); line-height: 1.4; }
+.confirm-step strong { display: block; font-size: 0.82rem; color: var(--text-dark); margin-bottom: 2px; }
+.btn-confirm-home {
+  background: var(--sage-dark); color: white;
+  border: none; border-radius: 40px;
+  padding: 14px 32px; font-size: 0.88rem; font-weight: 500;
+  cursor: pointer; font-family: var(--font-sans); transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-confirm-home:hover { background: var(--sage); }
+.confirm-promo-block {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #f0f7f0, #f8f4ec);
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--sage-light);
+}
+.confirm-promo-block p { font-size: 0.82rem; color: var(--text-mid); margin-bottom: 8px; }
+.confirm-promo-code {
+  font-size: 1.1rem; font-weight: 600; color: var(--sage-dark);
+  letter-spacing: 0.12em; font-family: var(--font-sans);
+  background: white; padding: 6px 18px; border-radius: 6px;
+  border: 1.5px dashed var(--sage);
+  display: inline-block; margin-top: 4px; cursor: pointer;
+}
+
+/* ══════════════════════════════════════
+   POPUP BIENVENUE
+══════════════════════════════════════ */
+.popup-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(30,25,15,0.55);
+  backdrop-filter: blur(5px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s;
+}
+.popup-overlay.open { opacity: 1; pointer-events: all; }
+.popup {
+  background: var(--cream);
+  border-radius: 20px;
+  max-width: 700px; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.94) translateY(16px);
+  transition: transform 0.4s cubic-bezier(0.34,1.2,0.64,1);
+}
+.popup-overlay.open .popup { transform: scale(1) translateY(0); }
+.popup-visual {
+  background: linear-gradient(160deg, #c8e4c8 0%, #a0c8a0 40%, #7aae7a 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 2.5rem 2rem; text-align: center; position: relative;
+  min-height: 340px;
+}
+.popup-plant { font-size: 4.5rem; margin-bottom: 0.75rem; }
+.popup-visual-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem; font-weight: 300; color: white; line-height: 1.2;
+}
+.popup-visual-sub { font-size: 0.82rem; color: rgba(255,255,255,0.8); margin-top: 6px; }
+.popup-discount-badge {
+  background: white; color: var(--sage-dark);
+  font-family: var(--font-serif); font-size: 2.8rem; font-weight: 600;
+  padding: 0.4rem 1.2rem; border-radius: var(--radius);
+  margin: 1rem 0; box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  line-height: 1.2;
+}
+.popup-content { padding: 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+.popup-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,0.25); border: none;
+  color: white; font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.popup-close:hover { background: rgba(255,255,255,0.4); }
+.popup-tag {
+  font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--sage-dark); font-weight: 500; margin-bottom: 0.6rem;
+}
+.popup-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem; font-weight: 300; line-height: 1.2;
+  color: var(--text-dark); margin-bottom: 0.75rem;
+}
+.popup-title em { color: var(--sage-dark); font-style: italic; }
+.popup-sub { font-size: 0.85rem; color: var(--text-mid); line-height: 1.7; font-weight: 300; margin-bottom: 1.5rem; }
+.popup-form { display: flex; flex-direction: column; gap: 0.75rem; }
+.popup-input {
+  padding: 11px 16px;
+  border: 1.5px solid var(--beige-dark); border-radius: 40px;
+  font-family: var(--font-sans); font-size: 0.88rem;
+  color: var(--text-dark); background: white; outline: none;
+  transition: border-color 0.2s;
+}
+.popup-input:focus { border-color: var(--sage); }
+.btn-popup {
+  background: var(--sage-dark); color: white;
+  border: none; border-radius: 40px;
+  padding: 13px 24px; font-size: 0.88rem; font-weight: 500;
+  cursor: pointer; font-family: var(--font-sans);
+  transition: all 0.2s;
+}
+.btn-popup:hover { background: var(--sage); }
+.popup-note { font-size: 0.7rem; color: var(--text-light); text-align: center; margin-top: 8px; }
+.popup-benefits { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1.5rem; }
+.popup-benefit { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-mid); }
+.popup-benefit .check { color: var(--sage-dark); font-weight: 600; }
+.popup-skip { font-size: 0.75rem; color: var(--text-light); text-align: center; cursor: pointer; margin-top: 10px; text-decoration: underline; }
+.popup-skip:hover { color: var(--text-mid); }
+
+/* ══════════════════════════════════════
+   NOTIFICATIONS
+══════════════════════════════════════ */
+.notif-stack { position: fixed; top: 80px; right: 24px; z-index: 8000; display: flex; flex-direction: column; gap: 10px; }
+.notif {
+  background: white;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--beige-mid);
+  box-shadow: var(--shadow-lg);
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+  min-width: 280px; max-width: 340px;
+  transform: translateX(120%);
+  transition: transform 0.4s cubic-bezier(0.34,1.2,0.64,1);
+}
+.notif.show { transform: translateX(0); }
+.notif-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0; background: var(--green-pale);
+}
+.notif-body strong { display: block; font-size: 0.82rem; color: var(--text-dark); }
+.notif-body span { font-size: 0.72rem; color: var(--text-light); }
+.notif-time { font-size: 0.65rem; color: var(--text-light); margin-left: auto; align-self: flex-start; flex-shrink: 0; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .checkout-layout { grid-template-columns: 1fr; }
+  .checkout-right { position: static; }
+  .popup { grid-template-columns: 1fr; }
+  .popup-visual { min-height: 200px; padding: 2rem; }
+  .confirm-steps-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+  .form-row.triple { grid-template-columns: 1fr 1fr; }
+  .checkout-layout { padding: 1.25rem 1rem 3rem; gap: 1.25rem; }
+  .steps-inner { gap: 0; }
+  .step-item { padding: 0 0.5rem; font-size: 0.7rem; }
+  .step-line { min-width: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     BANDEAU PROMO ANIMÉ
+═══════════════════════════════════ -->
+<div class="promo-bar">
+  <div class="promo-track" id="promo-track">
+    <div class="promo-item">🌿 <strong>−10% sur votre 1ère commande</strong> avec le code <span class="promo-code">BIENVENUE10</span></div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+    <div class="promo-item">🚚 <strong>Livraison OFFERTE</strong> dès 49€ d'achat</div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+    <div class="promo-item">🇫🇷 <strong>Fabrication 100% française</strong> — certifié Ecocert</div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+    <div class="promo-item">↩ <strong>30 jours</strong> pour changer d'avis — retours gratuits</div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+    <div class="promo-item">⭐ <strong>4,9/5</strong> basé sur 2 847 avis vérifiés</div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+    <!-- doublon pour effet continu -->
+    <div class="promo-item">🌿 <strong>−10% sur votre 1ère commande</strong> avec le code <span class="promo-code">BIENVENUE10</span></div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+    <div class="promo-item">🚚 <strong>Livraison OFFERTE</strong> dès 49€ d'achat</div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+    <div class="promo-item">🇫🇷 <strong>Fabrication 100% française</strong> — certifié Ecocert</div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+    <div class="promo-item">↩ <strong>30 jours</strong> pour changer d'avis — retours gratuits</div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+    <div class="promo-item">⭐ <strong>4,9/5</strong> basé sur 2 847 avis vérifiés</div>
+    <div class="promo-item"><span class="promo-sep">·</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     NAVBAR
+═══════════════════════════════════ -->
+<nav class="navbar">
+  <a class="nav-logo" href="#">🌿 Natu'<span>zone</span></a>
+  <div class="nav-secure">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    Paiement 100% sécurisé — SSL 256 bits
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════
+     ÉTAPES
+═══════════════════════════════════ -->
+<div class="steps-bar">
+  <div class="steps-inner">
+    <div class="step-item done" id="step-panier">
+      <div class="step-num">✓</div>
+      <span>Panier</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-item active" id="step-livraison">
+      <div class="step-num">2</div>
+      <span>Livraison</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-item" id="step-paiement">
+      <div class="step-num">3</div>
+      <span>Paiement</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-item" id="step-confirm">
+      <div class="step-num">4</div>
+      <span>Confirmation</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     CHECKOUT PRINCIPAL
+═══════════════════════════════════ -->
+<div id="checkout-view">
+<div class="checkout-layout">
+
+  <!-- COLONNE GAUCHE -->
+  <div class="checkout-left">
+
+    <!-- COORDONNÉES -->
+    <div class="form-block" id="block-coords">
+      <div class="form-block-header">
+        <div class="block-num">1</div>
+        <h3>Vos coordonnées</h3>
+      </div>
+      <div class="form-body">
+        <div class="form-row" style="margin-bottom:1rem">
+          <div class="form-group">
+            <label>Prénom *</label>
+            <input class="form-input" type="text" placeholder="Marie" id="inp-prenom">
+          </div>
+          <div class="form-group">
+            <label>Nom *</label>
+            <input class="form-input" type="text" placeholder="Dupont" id="inp-nom">
+          </div>
+        </div>
+        <div class="form-row" style="margin-bottom:1rem">
+          <div class="form-group">
+            <label>Email *</label>
+            <input class="form-input" type="email" placeholder="marie@exemple.fr" id="inp-email">
+          </div>
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input class="form-input" type="tel" placeholder="06 12 34 56 78">
+          </div>
+        </div>
+        <div style="margin-top: 0.5rem;">
+          <label style="display:flex; align-items:center; gap:8px; font-size:0.8rem; color:var(--text-mid); cursor:pointer;">
+            <input type="checkbox" checked style="accent-color: var(--sage-dark);"> Créer un compte pour suivre ma commande et profiter du programme fidélité
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADRESSE LIVRAISON -->
+    <div class="form-block">
+      <div class="form-block-header">
+        <div class="block-num">2</div>
+        <h3>Adresse de livraison</h3>
+      </div>
+      <div class="form-body">
+        <div class="form-group full" style="margin-bottom:1rem">
+          <label>Adresse *</label>
+          <input class="form-input" type="text" placeholder="12 rue des Fleurs" id="inp-adresse">
+        </div>
+        <div class="form-row" style="margin-bottom:1rem">
+          <div class="form-group">
+            <label>Complément</label>
+            <input class="form-input" type="text" placeholder="Bât A, Appt 3">
+          </div>
+          <div class="form-group">
+            <label>Code postal *</label>
+            <input class="form-input" type="text" placeholder="75001" id="inp-cp" maxlength="5">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ville *</label>
+            <input class="form-input" type="text" placeholder="Paris" id="inp-ville">
+          </div>
+          <div class="form-group">
+            <label>Pays</label>
+            <select class="form-input">
+              <option>France</option>
+              <option>Belgique</option>
+              <option>Suisse</option>
+              <option>Luxembourg</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODE DE LIVRAISON -->
+    <div class="form-block">
+      <div class="form-block-header">
+        <div class="block-num">3</div>
+        <h3>Mode de livraison</h3>
+      </div>
+      <div class="form-body">
+        <div class="delivery-options">
+
+          <div class="delivery-opt selected" onclick="selectDelivery(this, 0)" id="del-0">
+            <div class="delivery-radio"><div class="delivery-radio-dot"></div></div>
+            <div class="delivery-info">
+              <div class="delivery-name">📦 Colissimo à domicile</div>
+              <div class="delivery-desc">Livraison en 2–3 jours ouvrés • Suivi en temps réel</div>
+            </div>
+            <div class="delivery-price free">GRATUIT</div>
+            <div class="delivery-badge">Recommandé</div>
+          </div>
+
+          <div class="delivery-opt" onclick="selectDelivery(this, 4.90)" id="del-1">
+            <div class="delivery-radio"><div class="delivery-radio-dot"></div></div>
+            <div class="delivery-info">
+              <div class="delivery-name">⚡ Chronopost Express</div>
+              <div class="delivery-desc">Livraison le lendemain avant 13h • Hors dimanche</div>
+            </div>
+            <div class="delivery-price">4,90 €</div>
+          </div>
+
+          <div class="delivery-opt" onclick="selectDelivery(this, 2.50)" id="del-2">
+            <div class="delivery-radio"><div class="delivery-radio-dot"></div></div>
+            <div class="delivery-info">
+              <div class="delivery-name">📫 Point Relais Mondial Relay</div>
+              <div class="delivery-desc">Plus de 15 000 points relais en France • 5–7 jours</div>
+            </div>
+            <div class="delivery-price">2,50 €</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- PAIEMENT -->
+    <div class="form-block">
+      <div class="form-block-header">
+        <div class="block-num">4</div>
+        <h3>Paiement sécurisé</h3>
+      </div>
+      <div class="form-body">
+        <div class="payment-methods">
+          <div class="pay-method selected" onclick="selectPay(this)">
+            <span class="pay-icon">💳</span>
+            Carte bancaire
+          </div>
+          <div class="pay-method" onclick="selectPay(this)">
+            <span class="pay-icon">🅿️</span>
+            PayPal
+          </div>
+          <div class="pay-method" onclick="selectPay(this)">
+            <span class="pay-icon">🍎</span>
+            Apple Pay
+          </div>
+          <div class="pay-method" onclick="selectPay(this)">
+            <span class="pay-icon">🏦</span>
+            Virement
+          </div>
+        </div>
+        <div class="card-fields" id="card-fields">
+          <div class="form-group">
+            <label>Numéro de carte *</label>
+            <div class="card-num-wrap">
+              <input class="form-input" type="text" placeholder="1234 5678 9012 3456" id="inp-card" maxlength="19">
+              <div class="card-icons">
+                <span class="card-icon-sm">VISA</span>
+                <span class="card-icon-sm">MC</span>
+                <span class="card-icon-sm">CB</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-row triple">
+            <div class="form-group">
+              <label>Titulaire *</label>
+              <input class="form-input" type="text" placeholder="MARIE DUPONT">
+            </div>
+            <div class="form-group">
+              <label>Expiration *</label>
+              <input class="form-input" type="text" placeholder="MM/AA" maxlength="5" id="inp-exp">
+            </div>
+            <div class="form-group">
+              <label>CVV *</label>
+              <input class="form-input" type="text" placeholder="123" maxlength="3">
+            </div>
+          </div>
+          <label style="display:flex; align-items:center; gap:8px; font-size:0.78rem; color:var(--text-mid); cursor:pointer; margin-top:4px;">
+            <input type="checkbox" style="accent-color: var(--sage-dark);"> Sauvegarder cette carte pour mes prochaines commandes
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTE -->
+    <div class="form-block">
+      <div class="form-block-header">
+        <div class="block-num" style="background:var(--beige-dark); color:var(--text-mid);">?</div>
+        <h3>Note pour votre commande <span style="font-size:0.78rem; color:var(--text-light); font-weight:300; font-family:var(--font-sans);">(optionnel)</span></h3>
+      </div>
+      <div class="form-body">
+        <textarea class="form-input" rows="2" placeholder="Instructions spéciales, message cadeau…" style="resize:vertical;"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COLONNE DROITE — RÉCAP -->
+  <div class="checkout-right">
+
+    <!-- TIMER URGENCE -->
+    <div class="urgency-block">
+      <span class="urgency-icon">⏳</span>
+      <div class="urgency-text">Votre panier est <strong>réservé</strong> pendant</div>
+      <div class="urgency-timer" id="timer">14:59</div>
+    </div>
+
+    <!-- RÉCAP COMMANDE -->
+    <div class="recap-block">
+      <div class="recap-header">
+        <h3>📦 Votre commande</h3>
+        <span class="recap-toggle" onclick="toggleRecap()">Voir détails</span>
+      </div>
+      <div class="recap-items" id="recap-items">
+        <div class="recap-item">
+          <div class="recap-img" style="background: linear-gradient(135deg, #e8e0f0, #c8b8e8);">
+            💜
+            <div class="recap-qty-badge">1</div>
+          </div>
+          <div>
+            <div class="recap-item-name">HE Lavande Fine BIO</div>
+            <div class="recap-item-var">10 ml · Pureté HEBBD</div>
+          </div>
+          <div class="recap-item-price">12,90 €</div>
+        </div>
+        <div class="recap-item">
+          <div class="recap-img" style="background: linear-gradient(135deg, #e0ddf8, #b8b4e8);">
+            🌙
+            <div class="recap-qty-badge">2</div>
+          </div>
+          <div>
+            <div class="recap-item-name">Tisane Sereni'nuit BIO</div>
+            <div class="recap-item-var">50 g · Mélange expert</div>
+          </div>
+          <div class="recap-item-price">19,00 €</div>
+        </div>
+        <div class="recap-item" id="upsell-item-recap" style="display:none">
+          <div class="recap-img" style="background: linear-gradient(135deg, #e0f0f8, #b8d8f0);">
+            🛡️
+            <div class="recap-qty-badge" id="upsell-badge">1</div>
+          </div>
+          <div>
+            <div class="recap-item-name" id="upsell-recap-name">Produit ajouté</div>
+            <div class="recap-item-var" id="upsell-recap-var"></div>
+          </div>
+          <div class="recap-item-price" id="upsell-recap-price">0,00 €</div>
+        </div>
+      </div>
+
+      <div class="recap-divider"></div>
+
+      <!-- CODE PROMO -->
+      <div class="coupon-row">
+        <input class="coupon-input" type="text" placeholder="CODE PROMO" id="coupon-inp">
+        <button class="btn-coupon" onclick="applyCoupon()">Appliquer</button>
+      </div>
+      <div class="coupon-success" id="coupon-ok">
+        ✓ Code <strong id="coupon-label">BIENVENUE10</strong> appliqué — économisez <strong id="coupon-saving">3,19 €</strong> !
+      </div>
+
+      <div class="recap-divider"></div>
+
+      <!-- TOTAUX -->
+      <div class="totals" id="totals-block">
+        <div class="total-row">
+          <span class="label">Sous-total</span>
+          <span class="val" id="subtotal">31,90 €</span>
+        </div>
+        <div class="total-row free">
+          <span class="label">Livraison</span>
+          <span class="val" id="shipping-val">Gratuite 🎉</span>
+        </div>
+        <div class="total-row promo" id="discount-row" style="display:none">
+          <span class="label">Réduction (−10%)</span>
+          <span class="val" id="discount-val">−3,19 €</span>
+        </div>
+        <div class="total-row grand">
+          <span class="label">Total TTC</span>
+          <span class="val" id="grand-total">31,90 €</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="padding: 0 1.25rem 0;">
+        <button class="btn-checkout" id="btn-pay" onclick="processPayment()">
+          🔒 Confirmer et payer
+          <span id="pay-amount">31,90 €</span>
+        </button>
+      </div>
+      <div class="secure-badges">
+        <div class="secure-row">🔒 Paiement crypté SSL 256 bits — vos données sont protégées</div>
+        <div class="secure-icons">
+          <span class="secure-icon">VISA</span>
+          <span class="secure-icon">Mastercard</span>
+          <span class="secure-icon">PayPal</span>
+          <span class="secure-icon">Apple Pay</span>
+          <span class="secure-icon">CB</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPSELL -->
+    <div class="upsell-block">
+      <div class="upsell-title">🌿 Souvent achetés ensemble</div>
+      <div class="upsell-items">
+        <div class="upsell-item" id="upsell-1">
+          <span class="upsell-emoji">🛡️</span>
+          <div class="upsell-info">
+            <div class="upsell-name">Complexe Immunité Forte</div>
+            <div class="upsell-benefit">Renforce vos défenses naturelles</div>
+          </div>
+          <div class="upsell-price-col">
+            <div class="upsell-price">29,90 €</div>
+            <button class="btn-upsell-add" onclick="addUpsell('Complexe Immunité', '29.90', '🛡️', '60 gélules', this)">+ Ajouter</button>
+          </div>
+        </div>
+        <div class="upsell-item" id="upsell-2">
+          <span class="upsell-emoji">✨</span>
+          <div class="upsell-info">
+            <div class="upsell-name">Sérum Visage Éclat Naturel</div>
+            <div class="upsell-benefit">Complète parfaitement votre routine</div>
+          </div>
+          <div class="upsell-price-col">
+            <div class="upsell-price">34,90 €</div>
+            <button class="btn-upsell-add" onclick="addUpsell('Sérum Éclat', '34.90', '✨', '30 ml', this)">+ Ajouter</button>
+          </div>
+        </div>
+        <div class="upsell-item">
+          <span class="upsell-emoji">☀️</span>
+          <div class="upsell-info">
+            <div class="upsell-name">Macérât Millepertuis BIO</div>
+            <div class="upsell-benefit">Anti-inflammatoire naturel</div>
+          </div>
+          <div class="upsell-price-col">
+            <div class="upsell-price">18,90 €</div>
+            <button class="btn-upsell-add" onclick="addUpsell('Macérât Millepertuis', '18.90', '☀️', '100 ml', this)">+ Ajouter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRUST -->
+    <div style="background:white; border:1px solid var(--beige-mid); border-radius:var(--radius); padding:1.25rem;">
+      <div class="trust-list">
+        <div class="trust-list-item"><span class="icon">🌿</span> 100% naturel, certifié Ecocert & AB Bio</div>
+        <div class="trust-list-item"><span class="icon">🇫🇷</span> Fabriqué en France, laboratoires certifiés ISO</div>
+        <div class="trust-list-item"><span class="icon">↩</span> 30 jours satisfait ou remboursé, sans condition</div>
+        <div class="trust-list-item"><span class="icon">📞</span> Conseil herboriste 6j/7 — 04 76 00 00 00</div>
+        <div class="trust-list-item"><span class="icon">⭐</span> 4,9/5 sur 2 847 avis vérifiés Trustpilot</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE CONFIRMATION
+═══════════════════════════════════ -->
+<div class="confirm-page" id="confirm-view">
+  <div class="confirm-card">
+    <div class="confirm-anim">✅</div>
+    <div class="confirm-order-num">Commande #NZ-<span id="order-num">00000</span></div>
+    <h2 class="confirm-title">Merci <em id="confirm-name">Marie</em> !<br>Votre commande est confirmée.</h2>
+    <p class="confirm-sub">Un email de confirmation vient d'être envoyé à <strong id="confirm-email">marie@exemple.fr</strong>. Votre colis est en cours de préparation dans notre laboratoire de Grenoble.</p>
+    <div class="confirm-steps-grid">
+      <div class="confirm-step">
+        <div class="step-icon">📋</div>
+        <strong>Commande reçue</strong>
+        <p>Votre commande est enregistrée et sécurisée</p>
+      </div>
+      <div class="confirm-step">
+        <div class="step-icon">📦</div>
+        <strong>Préparation</strong>
+        <p>Expédition sous 24h depuis Grenoble</p>
+      </div>
+      <div class="confirm-step">
+        <div class="step-icon">🚚</div>
+        <strong>Livraison</strong>
+        <p>Colissimo 2-3j — lien de suivi par SMS</p>
+      </div>
+    </div>
+    <button class="btn-confirm-home" onclick="resetCheckout()">
+      🌿 Continuer mes achats
+    </button>
+    <div class="confirm-promo-block">
+      <p>🎁 Cadeau : <strong>−10% sur votre prochaine commande</strong></p>
+      <p style="font-size:0.75rem; color:var(--text-light);">Valable 30 jours — partagez-le avec vos proches !</p>
+      <div class="confirm-promo-code" onclick="copyCode()" title="Cliquer pour copier">FIDELIT10</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     POPUP BIENVENUE
+═══════════════════════════════════ -->
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup">
+    <div class="popup-visual">
+      <button class="popup-close" onclick="closePopup()">✕</button>
+      <div class="popup-plant">🌿</div>
+      <div class="popup-discount-badge">−10%</div>
+      <div class="popup-visual-title">Offre de<br>bienvenue</div>
+      <div class="popup-visual-sub">Réservée aux nouveaux membres</div>
+    </div>
+    <div class="popup-content">
+      <div class="popup-tag">Offre exclusive — Durée limitée</div>
+      <h2 class="popup-title">Votre <em>première commande</em> à −10%</h2>
+      <p class="popup-sub">Rejoignez 18 000 amoureux de la nature. Recevez votre code de réduction et nos conseils d'herboristes chaque semaine.</p>
+      <div class="popup-benefits">
+        <div class="popup-benefit"><span class="check">✓</span> Code −10% utilisable dès aujourd'hui</div>
+        <div class="popup-benefit"><span class="check">✓</span> Conseils exclusifs de nos herboristes</div>
+        <div class="popup-benefit"><span class="check">✓</span> Accès en avant-première aux nouveautés</div>
+        <div class="popup-benefit"><span class="check">✓</span> Recettes et rituels bien-être naturels</div>
+      </div>
+      <div class="popup-form">
+        <input class="popup-input" type="email" placeholder="Votre adresse email…" id="popup-email">
+        <button class="btn-popup" onclick="subscribePopup()">Recevoir mon code −10% →</button>
+      </div>
+      <div class="popup-note">🔒 Pas de spam. Désinscription en un clic. RGPD conforme.</div>
+      <div class="popup-skip" onclick="closePopup()">Non merci, je préfère payer plein tarif</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     NOTIFS ACHAT SOCIAL PROOF
+═══════════════════════════════════ -->
+<div class="notif-stack" id="notif-stack"></div>
+
+<script>
+// ═══════════════════════ DONNÉES ═══════════════════════
+let baseSubtotal = 31.90;
+let shippingCost = 0;
+let discountPct  = 0;
+let upsellTotal  = 0;
+let couponUsed   = false;
+
+// ═══════════════════════ TIMER ═══════════════════════
+let timeLeft = 14 * 60 + 59;
+const timerEl = document.getElementById('timer');
+const timerInterval = setInterval(() => {
+  if (timeLeft <= 0) { clearInterval(timerInterval); timerEl.textContent = '00:00'; return; }
+  timeLeft--;
+  const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+  const s = (timeLeft % 60).toString().padStart(2, '0');
+  timerEl.textContent = `${m}:${s}`;
+  if (timeLeft < 120) timerEl.style.color = '#c94a30';
+}, 1000);
+
+// ═══════════════════════ LIVRAISON ═══════════════════════
+function selectDelivery(el, cost) {
+  document.querySelectorAll('.delivery-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  shippingCost = cost;
+  updateTotals();
+  const shippingEl = document.getElementById('shipping-val');
+  shippingEl.textContent = cost === 0 ? 'Gratuite 🎉' : cost.toFixed(2).replace('.', ',') + ' €';
+  if (cost === 0) shippingEl.style.color = 'var(--sage-dark)';
+  else shippingEl.style.color = 'var(--text-dark)';
+}
+
+// ═══════════════════════ PAIEMENT MÉTHODE ═══════════════════════
+function selectPay(el) {
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+  const cf = document.getElementById('card-fields');
+  cf.style.display = el.querySelector('.pay-icon').textContent === '💳' ? 'flex' : 'none';
+}
+
+// ═══════════════════════ COUPON ═══════════════════════
+function applyCoupon() {
+  const code = document.getElementById('coupon-inp').value.trim().toUpperCase();
+  const validCodes = { 'BIENVENUE10': 10, 'NATU15': 15, 'FIDELITE20': 20 };
+  if (validCodes[code]) {
+    discountPct = validCodes[code];
+    couponUsed = true;
+    const saving = ((baseSubtotal + upsellTotal) * discountPct / 100).toFixed(2).replace('.', ',');
+    document.getElementById('coupon-label').textContent = code;
+    document.getElementById('coupon-saving').textContent = saving + ' €';
+    const ok = document.getElementById('coupon-ok');
+    ok.style.display = 'flex';
+    document.getElementById('discount-row').style.display = 'flex';
+    updateTotals();
+    document.getElementById('coupon-inp').style.borderColor = 'var(--sage)';
+  } else if (code) {
+    document.getElementById('coupon-inp').style.borderColor = 'var(--red)';
+    showNotif('❌', 'Code invalide', 'Vérifiez votre code promo');
+  }
+}
+
+// ═══════════════════════ UPSELL ═══════════════════════
+function addUpsell(name, priceStr, emoji, variant, btn) {
+  const price = parseFloat(priceStr);
+  upsellTotal += price;
+  btn.textContent = '✓ Ajouté';
+  btn.classList.add('added');
+  const ri = document.getElementById('upsell-item-recap');
+  ri.style.display = 'flex';
+  document.getElementById('upsell-recap-name').textContent = name;
+  document.getElementById('upsell-recap-var').textContent = variant;
+  document.getElementById('upsell-recap-price').textContent = price.toFixed(2).replace('.', ',') + ' €';
+  updateTotals();
+  showNotif(emoji, name + ' ajouté', 'Dans votre panier !');
+}
+
+function toggleRecap() {}
+
+// ═══════════════════════ TOTAUX ═══════════════════════
+function updateTotals() {
+  const sub = baseSubtotal + upsellTotal;
+  const discount = couponUsed ? sub * discountPct / 100 : 0;
+  const grand = sub - discount + shippingCost;
+  document.getElementById('subtotal').textContent = sub.toFixed(2).replace('.', ',') + ' €';
+  document.getElementById('discount-val').textContent = '−' + discount.toFixed(2).replace('.', ',') + ' €';
+  document.getElementById('grand-total').textContent = grand.toFixed(2).replace('.', ',') + ' €';
+  document.getElementById('pay-amount').textContent = grand.toFixed(2).replace('.', ',') + ' €';
+  if (couponUsed) {
+    const saving = (sub * discountPct / 100).toFixed(2).replace('.', ',');
+    document.getElementById('coupon-saving').textContent = saving + ' €';
+  }
+}
+
+// ═══════════════════════ VALIDATION FORMULAIRE ═══════════════════════
+function validateForm() {
+  const fields = [
+    { id: 'inp-prenom', label: 'prénom' },
+    { id: 'inp-nom', label: 'nom' },
+    { id: 'inp-email', label: 'email' },
+    { id: 'inp-adresse', label: 'adresse' },
+    { id: 'inp-cp', label: 'code postal' },
+    { id: 'inp-ville', label: 'ville' },
+  ];
+  let valid = true;
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (!el || !el.value.trim()) {
+      if (el) { el.classList.add('error'); el.classList.remove('valid'); }
+      valid = false;
+    } else {
+      el.classList.remove('error'); el.classList.add('valid');
+    }
+  });
+  return valid;
+}
+
+// ═══════════════════════ PAIEMENT ═══════════════════════
+function processPayment() {
+  if (!validateForm()) {
+    showNotif('⚠️', 'Formulaire incomplet', 'Veuillez remplir tous les champs requis');
+    document.querySelector('.form-input.error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  const btn = document.getElementById('btn-pay');
+  btn.classList.add('loading');
+  btn.innerHTML = '⏳ Traitement en cours…';
+  clearInterval(timerInterval);
+
+  // Mise à jour des étapes
+  document.getElementById('step-livraison').classList.remove('active');
+  document.getElementById('step-livraison').classList.add('done');
+  document.getElementById('step-livraison').querySelector('.step-num').textContent = '✓';
+  document.getElementById('step-paiement').classList.add('done');
+  document.getElementById('step-paiement').querySelector('.step-num').textContent = '✓';
+
+  setTimeout(() => {
+    const prenom = document.getElementById('inp-prenom').value || 'Marie';
+    const email  = document.getElementById('inp-email').value  || 'marie@exemple.fr';
+    document.getElementById('confirm-name').textContent  = prenom;
+    document.getElementById('confirm-email').textContent = email;
+    document.getElementById('order-num').textContent = Math.floor(Math.random() * 90000 + 10000);
+
+    document.getElementById('checkout-view').style.display = 'none';
+    const cv = document.getElementById('confirm-view');
+    cv.style.display = 'flex';
+    cv.scrollIntoView({ behavior: 'smooth' });
+
+    document.getElementById('step-confirm').classList.add('active');
+  }, 1800);
+}
+
+function resetCheckout() {
+  document.getElementById('confirm-view').style.display = 'none';
+  document.getElementById('checkout-view').style.display = 'block';
+  document.getElementById('btn-pay').classList.remove('loading');
+  document.getElementById('btn-pay').innerHTML = '🔒 Confirmer et payer <span id="pay-amount">31,90 €</span>';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyCode() {
+  showNotif('📋', 'Code copié !', 'FIDELIT10 — utilisez-le lors de votre prochaine commande');
+}
+
+// ═══════════════════════ POPUP ═══════════════════════
+function closePopup() {
+  document.getElementById('popup-overlay').classList.remove('open');
+}
+function subscribePopup() {
+  const email = document.getElementById('popup-email').value;
+  if (email && email.includes('@')) {
+    closePopup();
+    showNotif('🌿', 'Bienvenue dans la communauté !', 'Code BIENVENUE10 envoyé par email');
+    document.getElementById('coupon-inp').value = 'BIENVENUE10';
+  }
+}
+
+// ═══════════════════════ NOTIFICATIONS ═══════════════════════
+const socialProof = [
+  { name: 'Sophie B.', city: 'Lyon', product: 'HE Lavande Fine', emoji: '💜' },
+  { name: 'Thomas M.', city: 'Paris', product: 'Tisane Sereni\'nuit', emoji: '🌙' },
+  { name: 'Marie C.', city: 'Bordeaux', product: 'Coffret Bien-être', emoji: '🎁' },
+  { name: 'Julie D.', city: 'Nantes', product: 'Complexe Immunité', emoji: '🛡️' },
+  { name: 'Pierre L.', city: 'Marseille', product: 'Rose Musquée BIO', emoji: '🌹' },
+  { name: 'Camille T.', city: 'Toulouse', product: 'Sérum Éclat', emoji: '✨' },
+];
+let spIdx = 0;
+
+function showNotif(emoji, title, sub) {
+  const stack = document.getElementById('notif-stack');
+  const el = document.createElement('div');
+  el.className = 'notif';
+  const ago = Math.floor(Math.random() * 8) + 1;
+  el.innerHTML = `
+    <div class="notif-avatar">${emoji}</div>
+    <div class="notif-body">
+      <strong>${title}</strong>
+      <span>${sub}</span>
+    </div>
+    <div class="notif-time">à l'instant</div>
+  `;
+  stack.appendChild(el);
+  setTimeout(() => el.classList.add('show'), 50);
+  setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(() => el.remove(), 400);
+  }, 4000);
+}
+
+function showSocialProof() {
+  const sp = socialProof[spIdx % socialProof.length];
+  spIdx++;
+  showNotif(sp.emoji, `${sp.name} de ${sp.city}`, `vient de commander : ${sp.product}`);
+}
+
+// ═══════════════════════ INPUT MASKS ═══════════════════════
+document.getElementById('inp-card')?.addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim().slice(0, 19);
+});
+document.getElementById('inp-exp')?.addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/, '$1/$2').slice(0, 5);
+});
+document.getElementById('inp-cp')?.addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '').slice(0, 5);
+});
+document.querySelectorAll('.form-input').forEach(inp => {
+  inp.addEventListener('blur', function() {
+    if (this.value.trim()) this.classList.add('valid');
+    else this.classList.remove('valid');
+  });
+});
+
+// ═══════════════════════ INIT ═══════════════════════
+// Popup après 3s
+setTimeout(() => document.getElementById('popup-overlay').classList.add('open'), 3000);
+
+// Social proof toutes les 12s
+setTimeout(() => {
+  showSocialProof();
+  setInterval(showSocialProof, 12000);
+}, 6000);
+</script>
+</body>
+</html>
