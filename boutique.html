@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natu'zone – Boutique Herboristerie Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--sage:#7a9e7e;--sage-light:#a8c4a8;--sage-dark:#4e7352;--beige:#f5f0e8;--beige-mid:#e8e0d0;--beige-dark:#c8b89a;--cream:#fdfaf4;--brown:#6b4f2a;--text-dark:#2a2318;--text-mid:#5c4f3a;--text-light:#8a7a65;--green-pale:#e8f0e8;--gold:#b8960c;--red:#c94a30;--font-serif:'Cormorant Garamond',Georgia,serif;--font-sans:'DM Sans',sans-serif;--r:10px;--rsm:6px;--sh:0 2px 12px rgba(42,35,24,0.07);--sh-lg:0 8px 32px rgba(42,35,24,0.13);}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}body{font-family:var(--font-sans);background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+.navbar{position:sticky;top:0;z-index:500;background:rgba(253,250,244,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--beige-mid);height:64px;display:flex;align-items:center;padding:0 2rem;gap:2rem;}
+.logo{font-family:var(--font-serif);font-size:1.5rem;font-weight:600;color:var(--sage-dark);text-decoration:none;white-space:nowrap;}.logo span{color:var(--brown);}
+.nav-search{flex:1;max-width:420px;position:relative;}.nav-search input{width:100%;padding:8px 16px 8px 38px;border:1.5px solid var(--beige-dark);border-radius:40px;font-family:var(--font-sans);font-size:0.84rem;background:var(--beige);color:var(--text-dark);outline:none;transition:border-color 0.2s;}.nav-search input:focus{border-color:var(--sage);background:#fff;}.nav-search input::placeholder{color:var(--text-light);}.search-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:0.82rem;color:var(--text-light);pointer-events:none;}
+.nav-links{display:flex;gap:1.5rem;list-style:none;margin-left:auto;}.nav-links a{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s;}.nav-links a:hover{color:var(--sage-dark);}
+.nav-actions{display:flex;gap:8px;}.nbtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--beige-dark);background:var(--beige);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.85rem;transition:all 0.2s;position:relative;}.nbtn:hover{background:var(--green-pale);border-color:var(--sage);}.cart-dot{position:absolute;top:-3px;right:-3px;width:15px;height:15px;background:var(--sage-dark);color:#fff;border-radius:50%;font-size:8px;display:flex;align-items:center;justify-content:center;font-weight:600;}
+.cat-nav{background:#fff;border-bottom:2px solid var(--beige-mid);padding:0 2rem;display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none;}.cat-nav::-webkit-scrollbar{display:none;}
+.cat-nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 20px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;white-space:nowrap;min-width:100px;}.cat-nav-item:hover{border-bottom-color:var(--sage-light);}.cat-nav-item.active{border-bottom-color:var(--sage-dark);}.cat-nav-item .cn-icon{font-size:1.4rem;}.cat-nav-item .cn-label{font-size:0.72rem;font-weight:500;color:var(--text-mid);}.cat-nav-item.active .cn-label{color:var(--sage-dark);}.cat-nav-item .cn-count{font-size:0.62rem;color:var(--text-light);}
+.breadcrumb{padding:10px 2rem;font-size:0.75rem;color:var(--text-light);display:flex;align-items:center;gap:6px;background:var(--beige);border-bottom:1px solid var(--beige-mid);}.breadcrumb a{color:var(--text-light);text-decoration:none;}.breadcrumb a:hover{color:var(--sage-dark);}.breadcrumb .current{color:var(--text-dark);font-weight:500;}
+.shop-wrap{max-width:1380px;margin:0 auto;padding:1.5rem 2rem 4rem;display:grid;grid-template-columns:240px 1fr;gap:2rem;align-items:start;}
+.sidebar{position:sticky;top:130px;}.sidebar-block{background:#fff;border:1px solid var(--beige-mid);border-radius:var(--r);margin-bottom:1rem;overflow:hidden;box-shadow:var(--sh);}
+.sb-head{padding:0.85rem 1.1rem;font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);border-bottom:1px solid var(--beige);display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;}.sb-head .toggle{font-size:0.65rem;color:var(--text-light);transition:transform 0.2s;}.sb-head.collapsed .toggle{transform:rotate(-90deg);}.sb-body{padding:0.85rem 1.1rem;}.sb-body.hidden{display:none;}
+.need-chips{display:flex;flex-wrap:wrap;gap:5px;}.need-chip{padding:4px 11px;border-radius:40px;border:1.5px solid var(--beige-dark);font-size:0.73rem;color:var(--text-mid);cursor:pointer;transition:all 0.18s;font-family:var(--font-sans);background:#fff;}.need-chip:hover,.need-chip.active{background:var(--sage-dark);border-color:var(--sage-dark);color:#fff;}
+.price-wrap{padding:4px 0;}.price-slider{width:100%;accent-color:var(--sage-dark);cursor:pointer;}.price-row{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-light);margin-top:4px;}
+.filter-list{display:flex;flex-direction:column;gap:2px;}.filter-item{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:var(--rsm);cursor:pointer;transition:background 0.15s;}.filter-item:hover{background:var(--beige);}.filter-item input[type=checkbox]{accent-color:var(--sage-dark);width:14px;height:14px;flex-shrink:0;cursor:pointer;}.filter-item label{font-size:0.82rem;color:var(--text-mid);cursor:pointer;flex:1;display:flex;justify-content:space-between;align-items:center;}.filter-item label .fc{font-size:0.68rem;color:var(--text-light);background:var(--beige);padding:1px 6px;border-radius:10px;}
+.rating-list{display:flex;flex-direction:column;gap:4px;}.rating-item{display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:var(--rsm);cursor:pointer;}.rating-item input{accent-color:var(--sage-dark);width:14px;height:14px;cursor:pointer;}.rating-stars{color:var(--gold);font-size:0.78rem;}.rating-label{font-size:0.78rem;color:var(--text-mid);}
+.active-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0.75rem;}.atag{background:var(--green-pale);border:1px solid var(--sage-light);color:var(--sage-dark);font-size:0.71rem;padding:3px 9px;border-radius:40px;display:flex;align-items:center;gap:5px;}.atag-rm{cursor:pointer;opacity:0.7;font-size:0.75rem;}.atag-rm:hover{opacity:1;}
+.btn-clear{width:100%;padding:7px;border:1px solid var(--beige-dark);background:#fff;border-radius:var(--rsm);font-size:0.75rem;color:var(--text-light);cursor:pointer;font-family:var(--font-sans);transition:all 0.15s;margin-top:4px;}.btn-clear:hover{border-color:var(--sage);color:var(--sage-dark);}
+.cat-banner{border-radius:var(--r);overflow:hidden;position:relative;margin-bottom:1.5rem;height:160px;}.cat-banner img{width:100%;height:100%;object-fit:cover;object-position:center 60%;}.cat-banner-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(20,15,8,0.55) 0%,transparent 60%);}.cat-banner-content{position:absolute;left:2rem;top:50%;transform:translateY(-50%);}.cat-banner-title{font-family:var(--font-serif);font-size:1.8rem;font-weight:300;color:#fff;line-height:1.1;}.cat-banner-sub{font-size:0.78rem;color:rgba(255,255,255,0.75);margin-top:4px;}
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px;}.results-info{font-size:0.82rem;color:var(--text-mid);}.results-info strong{color:var(--text-dark);font-weight:500;}.toolbar-right{display:flex;align-items:center;gap:8px;}
+.sort-select{padding:7px 14px;border:1.5px solid var(--beige-dark);border-radius:40px;font-family:var(--font-sans);font-size:0.78rem;color:var(--text-mid);background:#fff;outline:none;cursor:pointer;}.view-toggle{display:flex;border:1px solid var(--beige-dark);border-radius:var(--rsm);overflow:hidden;}.vbtn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#fff;border:none;font-size:0.75rem;color:var(--text-light);transition:all 0.15s;}.vbtn.active,.vbtn:hover{background:var(--sage-dark);color:#fff;}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}.pgrid.list-view{grid-template-columns:1fr;}
+.pcard{background:#fff;border-radius:var(--r);border:1px solid var(--beige-mid);overflow:hidden;box-shadow:var(--sh);transition:all 0.28s;cursor:pointer;position:relative;}.pcard:hover{transform:translateY(-4px);box-shadow:var(--sh-lg);border-color:var(--sage-light);}
+.pcard-img-wrap{position:relative;overflow:hidden;background:var(--beige);}.pcard-img-wrap img{width:100%;aspect-ratio:1;object-fit:cover;display:block;transition:transform 0.5s;}.pcard:hover .pcard-img-wrap img{transform:scale(1.06);}
+.pbadge{position:absolute;top:8px;left:8px;z-index:2;font-size:0.64rem;font-weight:500;padding:2px 8px;border-radius:40px;}.b-bio{background:#3d7a3d;color:#fff;}.b-new{background:var(--brown);color:#fff;}.b-top{background:var(--sage-dark);color:#fff;}.b-promo{background:var(--red);color:#fff;}
+.pwish{position:absolute;top:8px;right:8px;z-index:2;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.9);border:1px solid rgba(200,184,154,0.4);display:flex;align-items:center;justify-content:center;font-size:0.8rem;cursor:pointer;transition:all 0.2s;}.pwish:hover{background:#fff;transform:scale(1.1);}.pwish.wished{color:var(--red);}
+.pcard-body{padding:0.85rem;}.pcard-cat{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage);font-weight:500;margin-bottom:3px;}.pcard-name{font-family:var(--font-serif);font-size:0.95rem;font-weight:400;color:var(--text-dark);margin-bottom:3px;line-height:1.25;}.pcard-volume{font-size:0.7rem;color:var(--text-light);margin-bottom:6px;}.pcard-stars{font-size:0.68rem;color:var(--gold);display:flex;align-items:center;gap:2px;margin-bottom:6px;}.pcard-stars span{color:var(--text-light);margin-left:2px;}.pcard-tags{display:flex;gap:3px;flex-wrap:wrap;}.ptag{font-size:0.6rem;padding:1px 6px;border-radius:40px;background:var(--beige);color:var(--text-mid);border:1px solid var(--beige-mid);}
+.pcard-footer{display:flex;align-items:center;justify-content:space-between;padding:0.65rem 0.85rem;border-top:1px solid var(--beige);}.pcard-price{font-family:var(--font-serif);font-size:1.1rem;font-weight:600;color:var(--text-dark);}.pcard-price-old{font-size:0.72rem;color:var(--text-light);text-decoration:line-through;margin-left:4px;font-family:var(--font-sans);}
+.btn-add{background:var(--sage-dark);color:#fff;border:none;border-radius:40px;padding:6px 14px;font-size:0.72rem;font-weight:500;cursor:pointer;font-family:var(--font-sans);transition:all 0.2s;white-space:nowrap;}.btn-add:hover{background:var(--sage);}
+.pgrid.list-view .pcard{display:grid;grid-template-columns:140px 1fr auto;align-items:center;}.pgrid.list-view .pcard-img-wrap img{aspect-ratio:1;width:140px;height:140px;}.pgrid.list-view .pcard-body{padding:1rem 1.25rem;}.pgrid.list-view .pcard-footer{border-top:none;border-left:1px solid var(--beige);flex-direction:column;gap:8px;padding:1rem;min-width:120px;}
+.empty-state{grid-column:1/-1;text-align:center;padding:4rem 2rem;}.empty-icon{font-size:3rem;margin-bottom:1rem;}.empty-title{font-family:var(--font-serif);font-size:1.4rem;font-weight:300;color:var(--text-mid);margin-bottom:0.5rem;}.empty-sub{font-size:0.85rem;color:var(--text-light);}
+.pagination{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:2.5rem;}.pag-btn{width:34px;height:34px;border-radius:var(--rsm);border:1px solid var(--beige-dark);background:#fff;cursor:pointer;font-size:0.8rem;color:var(--text-mid);transition:all 0.15s;display:flex;align-items:center;justify-content:center;font-family:var(--font-sans);}.pag-btn:hover,.pag-btn.active{background:var(--sage-dark);color:#fff;border-color:var(--sage-dark);}.pag-btn.dots{border:none;background:transparent;cursor:default;}
+.toast{position:fixed;top:74px;right:20px;z-index:9999;background:var(--sage-dark);color:#fff;padding:11px 18px;border-radius:var(--r);font-size:0.82rem;box-shadow:0 4px 18px rgba(78,115,82,0.4);transform:translateX(130%);transition:transform 0.32s cubic-bezier(0.34,1.2,0.64,1);display:flex;align-items:center;gap:8px;max-width:300px;}.toast.show{transform:translateX(0);}
+.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(20,15,8,0.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity 0.25s;}.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--cream);border-radius:16px;width:100%;max-width:860px;max-height:90vh;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 20px 70px rgba(20,15,8,0.25);transform:scale(0.96) translateY(12px);transition:transform 0.3s;}.modal-overlay.open .modal{transform:scale(1) translateY(0);}
+.modal-img{position:relative;overflow:hidden;border-radius:16px 0 0 16px;min-height:400px;}.modal-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(253,250,244,0.9);border:1px solid var(--beige-dark);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.85rem;z-index:5;}.modal-close:hover{background:#fff;}
+.modal-body{padding:2rem;overflow-y:auto;}.modal-cat{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage);font-weight:500;margin-bottom:5px;}.modal-name{font-family:var(--font-serif);font-size:1.7rem;font-weight:300;color:var(--text-dark);line-height:1.15;margin-bottom:6px;}.modal-stars{font-size:0.75rem;color:var(--gold);margin-bottom:0.75rem;}.modal-desc{font-size:0.85rem;color:var(--text-mid);line-height:1.75;font-weight:300;margin-bottom:1.1rem;}
+.modal-tabs{display:flex;border-bottom:1px solid var(--beige-mid);margin-bottom:1rem;}.modal-tab{padding:6px 14px;font-size:0.76rem;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-light);margin-bottom:-1px;transition:all 0.18s;}.modal-tab.active{color:var(--sage-dark);border-bottom-color:var(--sage-dark);font-weight:500;}
+.modal-tab-content{font-size:0.82rem;color:var(--text-mid);line-height:1.7;margin-bottom:1.25rem;}.modal-tab-content ul{padding-left:1.1rem;}.modal-tab-content li{margin-bottom:3px;}
+.modal-qty-row{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;}.qty-ctrl{display:flex;align-items:center;border:1.5px solid var(--beige-dark);border-radius:40px;overflow:hidden;}.qty-btn{width:32px;height:32px;border:none;background:transparent;font-size:1rem;cursor:pointer;color:var(--text-mid);transition:background 0.15s;}.qty-btn:hover{background:var(--beige);}.qty-num{width:28px;text-align:center;font-size:0.88rem;font-weight:500;}
+.modal-price{font-family:var(--font-serif);font-size:1.6rem;font-weight:600;color:var(--text-dark);}.modal-volume{font-size:0.75rem;color:var(--text-light);margin-top:2px;}
+.btn-modal-cart{width:100%;background:var(--sage-dark);color:#fff;border:none;border-radius:40px;padding:12px 20px;font-size:0.84rem;font-weight:500;cursor:pointer;font-family:var(--font-sans);transition:all 0.2s;}.btn-modal-cart:hover{background:var(--sage);}
+.modal-trust{display:flex;gap:1rem;margin-top:1rem;font-size:0.7rem;color:var(--text-light);}
+@media(max-width:1100px){.pgrid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:900px){.shop-wrap{grid-template-columns:1fr;}.sidebar{position:static;}.pgrid{grid-template-columns:repeat(2,1fr);}.modal{grid-template-columns:1fr;}.modal-img{border-radius:16px 16px 0 0;min-height:220px;}}
+@media(max-width:600px){.navbar{padding:0 1rem;gap:1rem;}.nav-links{display:none;}.pgrid{grid-template-columns:repeat(2,1fr);gap:0.65rem;}.shop-wrap{padding:1rem;}.cat-nav-item{padding:10px 12px;min-width:80px;}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"><span id="t-icon">🌿</span><span id="t-msg"></span></div>
+
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-img">
+      <img id="modal-img" src="" alt="">
+      <div class="modal-close" onclick="closeModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-cat" id="modal-cat"></div>
+      <h2 class="modal-name" id="modal-name"></h2>
+      <div class="modal-stars" id="modal-stars"></div>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-tabs">
+        <div class="modal-tab active" onclick="switchTab('bienfaits',this)">Bienfaits</div>
+        <div class="modal-tab" onclick="switchTab('utilisation',this)">Utilisation</div>
+        <div class="modal-tab" onclick="switchTab('composition',this)">Composition</div>
+      </div>
+      <div class="modal-tab-content" id="tab-bienfaits"></div>
+      <div class="modal-tab-content" id="tab-utilisation" style="display:none"></div>
+      <div class="modal-tab-content" id="tab-composition" style="display:none"></div>
+      <div class="modal-qty-row">
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="qty-num" id="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <div><div class="modal-price" id="modal-price"></div><div class="modal-volume" id="modal-volume"></div></div>
+        <div class="pwish" id="modal-wish" onclick="toggleWishModal()" style="position:static;width:36px;height:36px;flex-shrink:0;">♡</div>
+      </div>
+      <button class="btn-modal-cart" id="modal-cart-btn" onclick="addFromModal()">Ajouter au panier</button>
+      <div class="modal-trust"><span>✓ En stock</span><span>🚚 24-48h</span><span>↩ 30j retours</span><span>🔒 Sécurisé</span></div>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar">
+  <a class="logo" href="index.html">🌿 Natu'<span>zone</span></a>
+  <div class="nav-search"><span class="search-ico">🔍</span><input type="text" placeholder="Rechercher un produit, une plante…" id="search-input" oninput="applyFilters()"></div>
+  <ul class="nav-links"><li><a href="index.html">Accueil</a></li><li><a href="#">Conseils</a></li><li><a href="#">À propos</a></li></ul>
+  <div class="nav-actions">
+    <div class="nbtn" onclick="toast('♡','Wishlist')">♡</div>
+    <div class="nbtn" onclick="toast('👤','Mon compte')">👤</div>
+    <div class="nbtn" style="position:relative;" onclick="toast('🛒','Panier')">🛒<span class="cart-dot" id="cart-count">0</span></div>
+  </div>
+</nav>
+
+<div class="cat-nav" id="cat-nav">
+  <div class="cat-nav-item active" data-cat="all" onclick="selectCat('all',this)"><span class="cn-icon">🌿</span><span class="cn-label">Tout voir</span><span class="cn-count">24 produits</span></div>
+  <div class="cat-nav-item" data-cat="huiles" onclick="selectCat('huiles',this)"><span class="cn-icon">💧</span><span class="cn-label">Huiles essentielles</span><span class="cn-count">8 produits</span></div>
+  <div class="cat-nav-item" data-cat="tisanes" onclick="selectCat('tisanes',this)"><span class="cn-icon">🍵</span><span class="cn-label">Tisanes & Infusions</span><span class="cn-count">5 produits</span></div>
+  <div class="cat-nav-item" data-cat="plantes" onclick="selectCat('plantes',this)"><span class="cn-icon">🌱</span><span class="cn-label">Plantes séchées</span><span class="cn-count">4 produits</span></div>
+  <div class="cat-nav-item" data-cat="complements" onclick="selectCat('complements',this)"><span class="cn-icon">💊</span><span class="cn-label">Compléments naturels</span><span class="cn-count">3 produits</span></div>
+  <div class="cat-nav-item" data-cat="beaute" onclick="selectCat('beaute',this)"><span class="cn-icon">🌸</span><span class="cn-label">Beauté naturelle</span><span class="cn-count">2 produits</span></div>
+  <div class="cat-nav-item" data-cat="coffrets" onclick="selectCat('coffrets',this)"><span class="cn-icon">🎁</span><span class="cn-label">Coffrets bien-être</span><span class="cn-count">2 produits</span></div>
+</div>
+
+<div class="breadcrumb"><a href="index.html">Accueil</a><span>›</span><span class="current" id="bc-current">Boutique — Tous les produits</span></div>
+
+<div class="shop-wrap">
+  <aside class="sidebar">
+    <div id="active-tags-wrap" style="display:none;"><div class="active-tags" id="active-tags"></div><button class="btn-clear" onclick="clearAll()">✕ Effacer les filtres</button></div>
+    <div class="sidebar-block">
+      <div class="sb-head" onclick="toggleSb(this)">Par besoin <span class="toggle">▾</span></div>
+      <div class="sb-body"><div class="need-chips">
+        <button class="need-chip" onclick="toggleNeed(this,'Stress')">Stress</button>
+        <button class="need-chip" onclick="toggleNeed(this,'Sommeil')">Sommeil</button>
+        <button class="need-chip" onclick="toggleNeed(this,'Digestion')">Digestion</button>
+        <button class="need-chip" onclick="toggleNeed(this,'Énergie')">Énergie</button>
+        <button class="need-chip" onclick="toggleNeed(this,'Immunité')">Immunité</button>
+        <button class="need-chip" onclick="toggleNeed(this,'Beauté')">Beauté</button>
+        <button class="need-chip" onclick="toggleNeed(this,'Douleurs')">Douleurs</button>
+        <button class="need-chip" onclick="toggleNeed(this,'Détox')">Détox</button>
+      </div></div>
+    </div>
+    <div class="sidebar-block">
+      <div class="sb-head" onclick="toggleSb(this)">Prix <span class="toggle">▾</span></div>
+      <div class="sb-body"><div class="price-wrap"><input type="range" class="price-slider" min="0" max="100" value="100" id="price-range" oninput="updatePrice(this.value)"><div class="price-row"><span>0 €</span><span id="price-label">Tous les prix</span></div></div></div>
+    </div>
+    <div class="sidebar-block">
+      <div class="sb-head" onclick="toggleSb(this)">Certifications <span class="toggle">▾</span></div>
+      <div class="sb-body"><div class="filter-list">
+        <div class="filter-item"><input type="checkbox" id="f-bio" onchange="toggleFilter('bio',this)"><label for="f-bio">Certifié Bio AB <span class="fc">142</span></label></div>
+        <div class="filter-item"><input type="checkbox" id="f-ecocert" onchange="toggleFilter('ecocert',this)"><label for="f-ecocert">Ecocert <span class="fc">98</span></label></div>
+        <div class="filter-item"><input type="checkbox" id="f-hebbd" onchange="toggleFilter('hebbd',this)"><label for="f-hebbd">HEBBD (HE) <span class="fc">48</span></label></div>
+        <div class="filter-item"><input type="checkbox" id="f-vegan" onchange="toggleFilter('vegan',this)"><label for="f-vegan">Vegan <span class="fc">87</span></label></div>
+      </div></div>
+    </div>
+    <div class="sidebar-block">
+      <div class="sb-head" onclick="toggleSb(this)">Note clients <span class="toggle">▾</span></div>
+      <div class="sb-body"><div class="rating-list">
+        <div class="rating-item"><input type="radio" name="rating" value="5" onchange="setRating(5)"><span class="rating-stars">★★★★★</span><span class="rating-label">seulement</span></div>
+        <div class="rating-item"><input type="radio" name="rating" value="4" onchange="setRating(4)"><span class="rating-stars">★★★★☆</span><span class="rating-label">et plus</span></div>
+        <div class="rating-item"><input type="radio" name="rating" value="0" onchange="setRating(0)"><span class="rating-label">Toutes les notes</span></div>
+      </div></div>
+    </div>
+  </aside>
+  <div>
+    <div class="cat-banner"><img id="banner-img" src="https://images.unsplash.com/photo-1547592180-85f173990554?w=1200&q=80&fit=crop" alt="Boutique Natu'zone"><div class="cat-banner-overlay"></div><div class="cat-banner-content"><div class="cat-banner-title" id="banner-title">Toute notre boutique naturelle</div><div class="cat-banner-sub" id="banner-sub">200+ références bio · Qualité certifiée · Fabrication française</div></div></div>
+    <div class="toolbar">
+      <div class="results-info">Affichage de <strong id="results-count">24</strong> produits</div>
+      <div class="toolbar-right">
+        <select class="sort-select" onchange="sortBy(this.value)"><option value="pop">Popularité</option><option value="price-asc">Prix croissant</option><option value="price-desc">Prix décroissant</option><option value="new">Nouveautés</option><option value="rating">Meilleures notes</option><option value="name">Nom A-Z</option></select>
+        <div class="view-toggle"><div class="vbtn active" id="vbtn-grid" onclick="setView('grid')">⊞</div><div class="vbtn" id="vbtn-list" onclick="setView('list')">☰</div></div>
+      </div>
+    </div>
+    <div class="pgrid" id="pgrid"></div>
+    <div class="pagination"><div class="pag-btn">‹</div><div class="pag-btn active">1</div><div class="pag-btn">2</div><div class="pag-btn">3</div><div class="pag-btn dots">…</div><div class="pag-btn">8</div><div class="pag-btn">›</div></div>
+  </div>
+</div>
+
+<script>
+const products=[
+  {id:1,name:'HE Lavande Fine',cat:'huiles',catLabel:'Huiles essentielles',badge:'top',badgeLabel:'N°1',price:12.90,stars:5,reviews:487,volume:'10 ml',needs:['Stress','Sommeil'],bio:true,hebbd:true,img:'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&q=80&fit=crop',desc:'Distillée en altitude dans les Alpes françaises. La plus relaxante des huiles essentielles, incontournable.',bienfaits:['Apaise stress et anxiété','Favorise un sommeil réparateur','Soulage les tensions musculaires','Antiseptique naturelle'],utilisation:'Diffusion : 5-8 gouttes 30 min. Sur poignets : 2 gouttes pures. Massage : diluer 3% dans HV.',composition:'Linalol (30-45%), Acétate de linalyle (25-45%). 100% pure HEBBD certifiée.'},
+  {id:2,name:'HE Tea Tree Pure',cat:'huiles',catLabel:'Huiles essentielles',badge:'bio',badgeLabel:'HEBBD',price:10.90,stars:5,reviews:389,volume:'10 ml',needs:['Immunité','Beauté'],bio:false,hebbd:true,img:'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&q=80&fit=crop',desc:'Antiseptique naturel puissant. Melaleuca alternifolia de qualité pharmaceutique, 100% pure HEBBD.',bienfaits:['Antiseptique et antibactérien','Traite boutons et imperfections','Assainit l\'air en diffusion','Anti-fongique efficace'],utilisation:'Application ponctuelle pure sur boutons. Diffusion : 5 gouttes. Ne pas ingérer.',composition:'Terpinène-4-ol (35-48%), γ-terpinène (10-28%). HEBBD certifiée.'},
+  {id:3,name:'HE Eucalyptus Radié',cat:'huiles',catLabel:'Huiles essentielles',badge:'new',badgeLabel:'Nouveau',price:9.50,stars:5,reviews:124,volume:'10 ml',needs:['Immunité','Énergie'],bio:false,hebbd:true,img:'https://images.unsplash.com/photo-1587334274328-64186a80aeee?w=400&q=80&fit=crop',desc:'L\'alliée de vos voies respiratoires. Fraîche et efficace contre les maux hivernaux.',bienfaits:['Dégage les voies respiratoires','Stimule et revitalise','Antibactérienne naturelle','Idéale en hiver'],utilisation:'Diffusion : 4-6 gouttes. Inhalation : 2 gouttes sur mouchoir. Massage thoracique dilué 5%.',composition:'1,8-cinéole 65-75%, α-pinène, limonène. Eucalyptus radiata HEBBD.'},
+  {id:4,name:'HE Menthe Poivrée',cat:'huiles',catLabel:'Huiles essentielles',badge:null,price:11.50,stars:5,reviews:203,volume:'10 ml',needs:['Énergie','Digestion'],bio:true,hebbd:true,img:'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=400&q=80&fit=crop',desc:'Tonifiante et rafraîchissante. Idéale contre les maux de tête, nausées et fatigue.',bienfaits:['Soulage les maux de tête','Combat les nausées','Stimule la concentration','Soulage douleurs musculaires'],utilisation:'Tempes & nuque : 1 goutte diluée. Diffusion : 3-4 gouttes max. Déconseillée enfants.',composition:'Menthol (35-45%), Menthone (15-25%). Bio certifié AB.'},
+  {id:5,name:'HE Ylang Ylang',cat:'huiles',catLabel:'Huiles essentielles',badge:'top',badgeLabel:'Bestseller',price:14.90,stars:5,reviews:178,volume:'10 ml',needs:['Stress','Beauté'],bio:false,hebbd:true,img:'https://images.unsplash.com/photo-1556228720-da3060f05e0e?w=400&q=80&fit=crop',desc:'Florale et sensuelle. L\'huile du bien-être émotionnel par excellence.',bienfaits:['Réduit stress et anxiété','Favorise la relaxation','Nourrit les cheveux','Aphrodisiaque naturelle'],utilisation:'Diffusion : 3-5 gouttes. Cheveux : 2 gouttes dans HV. Bain : 5 gouttes.',composition:'Linalol, Géraniol, Acétate de géranyle. Cananga odorata HEBBD.'},
+  {id:6,name:'HE Romarin Camphre',cat:'huiles',catLabel:'Huiles essentielles',badge:'bio',badgeLabel:'Bio',price:8.90,stars:4,reviews:156,volume:'10 ml',needs:['Énergie','Douleurs'],bio:true,hebbd:true,img:'https://images.unsplash.com/photo-1518335935020-cfd6580c1ab4?w=400&q=80&fit=crop',desc:'Stimulante et tonique. Idéale pour les douleurs musculaires et la mémoire.',bienfaits:['Soulage les douleurs musculaires','Stimule la mémoire','Active la circulation','Tonifiante'],utilisation:'Massage : diluer 3% dans HV. Diffusion : 5 gouttes matin. Déconseillée enceinte.',composition:'Camphre (15-25%), 1,8-cinéole (30-40%). Bio AB.'},
+  {id:7,name:'HE Rose de Damas',cat:'huiles',catLabel:'Huiles essentielles',badge:'top',badgeLabel:'Premium',price:38.90,stars:5,reviews:89,volume:'5 ml',needs:['Stress','Beauté'],bio:false,hebbd:true,img:'https://images.unsplash.com/photo-1548142813-c348350df52b?w=400&q=80&fit=crop',desc:'La reine des huiles essentielles. 3 tonnes de pétales pour 1 kg. Un trésor thérapeutique.',bienfaits:['Anti-âge et régénérante','Apaise peaux sensibles','Équilibre émotionnel','Antidépresseur doux'],utilisation:'Visage : 1 goutte diluée à 1%. Diffusion : 2-3 gouttes. Parfum naturel.',composition:'Citronellol (18-40%), Géraniol (10-22%). Rosa damascena HEBBD.'},
+  {id:8,name:'HE Citron Bio',cat:'huiles',catLabel:'Huiles essentielles',badge:'bio',badgeLabel:'Bio',price:7.90,stars:5,reviews:267,volume:'10 ml',needs:['Énergie','Détox'],bio:true,hebbd:true,img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80&fit=crop',desc:'Purifiante et dynamisante. L\'huile du matin par excellence pour booster la vitalité.',bienfaits:['Purifie l\'air','Boost d\'énergie','Détoxifiante','Répulsif insectes naturel'],utilisation:'Diffusion : 8-10 gouttes matin. Photosensibilisante — éviter exposition solaire.',composition:'D-limonène (65-80%). Citrus limon Bio AB, zeste.'},
+  {id:9,name:'Tisane Sereni\'nuit BIO',cat:'tisanes',catLabel:'Tisanes & Infusions',badge:'bio',badgeLabel:'Bio',price:9.50,stars:5,reviews:312,volume:'50 g · ~25 tasses',needs:['Stress','Sommeil'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=400&q=80&fit=crop',desc:'Le rituel du soir par excellence. Valériane, passiflore et mélisse pour un sommeil profond.',bienfaits:['Facilite l\'endormissement','Réduit les réveils','Apaise le système nerveux','Sans accoutumance'],utilisation:'1 c. à soupe dans 250 ml eau bouillante. Infuser 10 min. 30 min avant le coucher.',composition:'Valériane* (30%), Passiflore* (25%), Mélisse* (25%), Camomille* (20%). * bio.'},
+  {id:10,name:'Tisane Digestion Légère',cat:'tisanes',catLabel:'Tisanes & Infusions',badge:'bio',badgeLabel:'Bio',price:8.90,stars:4,reviews:276,volume:'50 g · ~25 tasses',needs:['Digestion'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&q=80&fit=crop',desc:'Soulage les ballonnements et active la digestion. Menthe, fenouil et gingembre.',bienfaits:['Soulage les ballonnements','Active la digestion','Calme les crampes','Rafraîchit l\'haleine'],utilisation:'1 c. à soupe dans eau bouillante, infuser 8 min. Après les repas, 2-3 tasses/jour.',composition:'Menthe poivrée* (40%), Fenouil* (25%), Gingembre* (20%), Carvi* (15%). * bio.'},
+  {id:11,name:'Tisane Immunité Boost',cat:'tisanes',catLabel:'Tisanes & Infusions',badge:'new',badgeLabel:'Nouveau',price:10.90,stars:5,reviews:94,volume:'50 g · ~20 tasses',needs:['Immunité'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1563822249366-3efb23b8e0c9?w=400&q=80&fit=crop',desc:'Formule hivernale puissante. Échinacée, sureau et gingembre pour vos défenses naturelles.',bienfaits:['Stimule les défenses','Riche en antioxydants','Effet réchauffant','Prévient les infections'],utilisation:'2 c. à café dans 250 ml eau bouillante. Infuser 12 min. 2-3 tasses/jour, cure 3 semaines.',composition:'Échinacée* (35%), Sureau* (25%), Gingembre* (20%), Thym* (20%). * bio.'},
+  {id:12,name:'Tisane Détox Printemps',cat:'tisanes',catLabel:'Tisanes & Infusions',badge:'bio',badgeLabel:'Bio',price:9.90,stars:5,reviews:143,volume:'50 g',needs:['Détox','Énergie'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=400&q=80&fit=crop',desc:'Drainage et purification naturelle. Pissenlit, ortie et romarin pour votre cure détox.',bienfaits:['Drainante et dépurative','Soutient le foie','Réduit les œdèmes','Purifie la peau'],utilisation:'1 c. à soupe dans 250 ml eau bouillante. Infuser 10 min. 3 tasses/jour, 3 semaines.',composition:'Pissenlit* (30%), Ortie* (25%), Romarin* (20%), Artichaut* (15%), Citron* (10%). * bio.'},
+  {id:13,name:'Tisane Énergie Matin',cat:'tisanes',catLabel:'Tisanes & Infusions',badge:'top',badgeLabel:'Bestseller',price:9.50,stars:5,reviews:218,volume:'50 g',needs:['Énergie'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&q=80&fit=crop',desc:'Maté, ginseng et guaraná pour une énergie douce et durable. Remplacez votre café.',bienfaits:['Énergie sans nervosité','Améliore la concentration','Stimule le métabolisme','Sans excitants agressifs'],utilisation:'1 c. à soupe dans eau chaude 90°C. Infuser 5 min. Matin uniquement.',composition:'Maté* (30%), Ginseng* (25%), Thé vert* (20%), Guaraná* (15%), Gingembre* (10%). * bio.'},
+  {id:14,name:'Camomille Matricaire BIO',cat:'plantes',catLabel:'Plantes séchées',badge:'bio',badgeLabel:'Bio',price:7.50,stars:5,reviews:198,volume:'50 g',needs:['Stress','Digestion'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1470072768013-bf9532016c10?w=400&q=80&fit=crop',desc:'La plante du calme et du confort digestif. Fleurs séchées de première qualité.',bienfaits:['Apaisante et antispasmodique','Soulage les troubles digestifs','Anti-inflammatoire','Apaisante pour la peau'],utilisation:'1 c. à café de fleurs pour 200 ml eau bouillante. Infuser 8-10 min. 3 tasses/jour.',composition:'Fleurs de Matricaria recutita* 100%. Teneur azulène >0.3%. * bio AB.'},
+  {id:15,name:'Valériane Racines BIO',cat:'plantes',catLabel:'Plantes séchées',badge:'bio',badgeLabel:'Bio',price:8.90,stars:5,reviews:167,volume:'50 g',needs:['Stress','Sommeil'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80&fit=crop',desc:'La reine des plantes du sommeil. Racines de Valeriana officinalis séchées.',bienfaits:['Facilite l\'endormissement','Réduit l\'anxiété','Muscle-relaxant','Améliore le sommeil'],utilisation:'1 c. à soupe dans 250 ml eau froide. Porter à ébullition 2 min, infuser 10 min. Soir.',composition:'Racines de Valeriana officinalis* 100%. Acide valérénique garanti. * bio AB.'},
+  {id:16,name:'Millepertuis Fleurs BIO',cat:'plantes',catLabel:'Plantes séchées',badge:'bio',badgeLabel:'Bio',price:7.90,stars:4,reviews:134,volume:'50 g',needs:['Stress','Énergie'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=400&q=80&fit=crop',desc:'L\'antidépresseur naturel. Sommités fleuries de Hypericum perforatum.',bienfaits:['Améliore l\'humeur','Combat la déprime','Cicatrisant externe','Anti-viral naturel'],utilisation:'1 c. à soupe dans 250 ml eau bouillante. Infuser 10 min. Interactions médicamenteuses : consulter.',composition:'Sommités fleuries Hypericum perforatum* 100%. Hypéricine >0.2%. * bio AB.'},
+  {id:17,name:'Ortie Feuilles BIO',cat:'plantes',catLabel:'Plantes séchées',badge:'bio',badgeLabel:'Bio',price:6.50,stars:5,reviews:112,volume:'100 g',needs:['Détox','Énergie'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1595452767427-0905ad9b036d?w=400&q=80&fit=crop',desc:'La plante minérale. Riche en fer, calcium, magnésium pour une cure reminéralisante.',bienfaits:['Reminéralisante','Drainante et détox','Riche en fer naturel','Anti-inflammatoire'],utilisation:'1 grosse poignée dans 500 ml eau bouillante. Infuser 15 min. 2-3 tasses/jour en cure.',composition:'Feuilles Urtica dioica* 100%. Origine France. * bio AB.'},
+  {id:18,name:'Complexe Immunité Forte',cat:'complements',catLabel:'Compléments naturels',badge:'promo',badgeLabel:'−15%',price:29.90,stars:5,reviews:218,volume:'60 gélules · 1 mois',needs:['Immunité'],bio:false,hebbd:false,img:'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?w=400&q=80&fit=crop',desc:'Formule premium : échinacée, propolis, acérola et zinc pour renforcer vos défenses.',bienfaits:['Stimule les défenses','Vitamine C naturelle','Action antioxydante','Réduit durée infections'],utilisation:'2 gélules matin et soir, 3 semaines. Renouveler en automne et hiver.',composition:'Échinacée (3.2% polyphénols), Propolis verte, Acérola (17% vit C), Zinc bisglycinate.'},
+  {id:19,name:'Magnésium Marin + B6',cat:'complements',catLabel:'Compléments naturels',badge:'top',badgeLabel:'Bestseller',price:19.90,stars:5,reviews:341,volume:'60 gélules · 2 mois',needs:['Stress','Énergie'],bio:false,hebbd:false,img:'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80&fit=crop',desc:'Le duo anti-fatigue et anti-stress. Magnésium marin hautement biodisponible + B6.',bienfaits:['Réduit fatigue et stress','Améliore le sommeil','Soutient le système nerveux','Réduit les crampes'],utilisation:'1 gélule matin et soir avec un grand verre d\'eau, pendant les repas. Cure 2 mois.',composition:'Magnésium marin (66mg/gél), Vitamine B6 (1.4mg), Taurine, Gélule végétale.'},
+  {id:20,name:'Mélatonine Végétale',cat:'complements',catLabel:'Compléments naturels',badge:'new',badgeLabel:'Nouveau',price:16.90,stars:4,reviews:87,volume:'30 gélules · 1 mois',needs:['Sommeil'],bio:false,hebbd:false,img:'https://images.unsplash.com/photo-1541199249251-f713e6145474?w=400&q=80&fit=crop',desc:'Mélatonine végétale + valériane + passiflore pour un sommeil naturel réparateur.',bienfaits:['Facilite l\'endormissement','Réduit le temps d\'endormissement','Réduit les effets du jetlag','Sans accoutumance'],utilisation:'1 gélule 30 min avant le coucher. Pas avec de l\'alcool. Consulter médecin si traitement.',composition:'Mélatonine végétale (1mg), Extrait de valériane (100mg), Passiflore (50mg), Gélule végétale.'},
+  {id:21,name:'Sérum Visage Éclat BIO',cat:'beaute',catLabel:'Beauté naturelle',badge:'bio',badgeLabel:'Écocert',price:34.90,stars:5,reviews:156,volume:'30 ml',needs:['Beauté'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&q=80&fit=crop',desc:'Rose musquée, calendula et vitamine C naturelle pour un teint lumineux et unifié.',bienfaits:['Illumine et unifie le teint','Atténue taches et rougeurs','Lisse les ridules','Hydratation longue durée'],utilisation:'3-4 gouttes matin et/ou soir sur visage propre. Masser en mouvements ascendants.',composition:'Rose musquée* (15%), Calendula* (10%), Vitamine C stabilisée (3%), Acide hyaluronique végétal.'},
+  {id:22,name:'Huile Rose Musquée BIO',cat:'beaute',catLabel:'Beauté naturelle',badge:'top',badgeLabel:'Coup de ♡',price:24.90,stars:5,reviews:214,volume:'30 ml',needs:['Beauté'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1556228720-da3060f05e0e?w=400&q=80&fit=crop',desc:'Extraite à froid de Rosa rubiginosa du Chili. Anti-âge et régénérante exceptionnelle.',bienfaits:['Réduit rides et ridules','Atténue cicatrices','Régénère les peaux abîmées','Oméga 3, 6 et 9'],utilisation:'2-3 gouttes sur visage sec, masser délicatement. Matin sous crème ou soir en soin de nuit.',composition:'Huile de Rosa rubiginosa* 100%, extraction à froid, non raffinée. Bio AB et Ecocert.'},
+  {id:23,name:'Coffret Sérénité & Stress',cat:'coffrets',catLabel:'Coffrets bien-être',badge:'top',badgeLabel:'Idée cadeau',price:59.90,stars:5,reviews:203,volume:'5 produits',needs:['Stress','Sommeil'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1607006344380-b6775a0824a7?w=400&q=80&fit=crop',desc:'Nos 5 bestsellers anti-stress dans un coffret kraft élégant avec guide d\'utilisation.',bienfaits:['HE Lavande Fine 10ml','Tisane Sereni\'nuit 50g','Huile de massage 100ml','Mélange diffusion 10ml','Guide phytothérapie illustré'],utilisation:'Chaque produit accompagné de sa fiche. Guide complet avec protocoles recommandés.',composition:'Voir composition individuelle de chaque produit. Emballage recyclable 100%.'},
+  {id:24,name:'Coffret Immunité Hiver',cat:'coffrets',catLabel:'Coffrets bien-être',badge:'new',badgeLabel:'Nouveau',price:49.90,stars:5,reviews:78,volume:'4 produits',needs:['Immunité'],bio:true,hebbd:false,img:'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&q=80&fit=crop',desc:'Kit complet pour passer l\'hiver en forme. Sélection d\'herboriste pour vos défenses.',bienfaits:['Tisane Immunité Boost 50g','HE Eucalyptus Radié 10ml','Complexe Immunité 30 gélules','Miel de thym sauvage 250g'],utilisation:'Protocole hivernal inclus. Cure de 3 semaines recommandée à l\'entrée de l\'hiver.',composition:'Voir composition individuelle de chaque produit. Valeur contenu : 68€.'},
+];
+
+const banners={
+  all:{img:'https://images.unsplash.com/photo-1547592180-85f173990554?w=1200&q=80&fit=crop',title:'Toute notre boutique naturelle',sub:'200+ références bio · Qualité certifiée · Fabrication française'},
+  huiles:{img:'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=1200&q=80&fit=crop',title:'Huiles Essentielles',sub:'48 références HEBBD certifiées · Distillation artisanale · Pureté garantie'},
+  tisanes:{img:'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=1200&q=80&fit=crop',title:'Tisanes & Infusions',sub:'62 mélanges bio · Recettes d\'herboriste · Plantes certifiées AB'},
+  plantes:{img:'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=80&fit=crop',title:'Plantes Séchées',sub:'85 plantes médicinales · Séchage naturel · Origine France & monde'},
+  complements:{img:'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?w=1200&q=80&fit=crop',title:'Compléments Naturels',sub:'34 formules expertes · Actifs concentrés · Gélules végétales'},
+  beaute:{img:'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1200&q=80&fit=crop',title:'Beauté Naturelle',sub:'28 soins bio · Certifiés Ecocert · Sans perturbateurs endocriniens'},
+  coffrets:{img:'https://images.unsplash.com/photo-1607006344380-b6775a0824a7?w=1200&q=80&fit=crop',title:'Coffrets Bien-être',sub:'12 coffrets cadeaux · Emballage recyclable · Livraison offerte'},
+};
+
+let activeCat='all',activeNeeds=new Set(),activeFilters=new Set(),minRating=0,maxPrice=100,sortMode='pop',viewMode='grid',currentQty=1,currentProduct=null,wishlist=new Set(),cartCount=0;
+
+function selectCat(cat,el){
+  activeCat=cat;
+  document.querySelectorAll('.cat-nav-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  const b=banners[cat];
+  document.getElementById('banner-img').src=b.img;
+  document.getElementById('banner-title').textContent=b.title;
+  document.getElementById('banner-sub').textContent=b.sub;
+  const labels={all:'Boutique — Tous les produits',huiles:'Boutique › Huiles essentielles',tisanes:'Boutique › Tisanes & Infusions',plantes:'Boutique › Plantes séchées',complements:'Boutique › Compléments naturels',beaute:'Boutique › Beauté naturelle',coffrets:'Boutique › Coffrets bien-être'};
+  document.getElementById('bc-current').textContent=labels[cat];
+  applyFilters();
+}
+
+function toggleNeed(el,need){el.classList.toggle('active');if(el.classList.contains('active'))activeNeeds.add(need);else activeNeeds.delete(need);applyFilters();updateTags();}
+function toggleFilter(key,cb){if(cb.checked)activeFilters.add(key);else activeFilters.delete(key);applyFilters();updateTags();}
+function setRating(r){minRating=r;applyFilters();}
+function updatePrice(v){maxPrice=parseInt(v);document.getElementById('price-label').textContent=v>=100?'Tous les prix':'Jusqu\'à '+v+' €';applyFilters();}
+function sortBy(val){sortMode=val;applyFilters();}
+
+function applyFilters(){
+  const search=document.getElementById('search-input').value.toLowerCase().trim();
+  let result=products.filter(p=>{
+    if(activeCat!=='all'&&p.cat!==activeCat)return false;
+    if(activeNeeds.size>0&&!p.needs.some(n=>activeNeeds.has(n)))return false;
+    if(activeFilters.has('bio')&&!p.bio)return false;
+    if(activeFilters.has('hebbd')&&!p.hebbd)return false;
+    if(p.price>maxPrice)return false;
+    if(p.stars<minRating)return false;
+    if(search&&!p.name.toLowerCase().includes(search)&&!p.catLabel.toLowerCase().includes(search)&&!p.needs.some(n=>n.toLowerCase().includes(search)))return false;
+    return true;
+  });
+  if(sortMode==='price-asc')result.sort((a,b)=>a.price-b.price);
+  else if(sortMode==='price-desc')result.sort((a,b)=>b.price-a.price);
+  else if(sortMode==='new')result.sort((a,b)=>(b.badge==='new'?1:0)-(a.badge==='new'?1:0));
+  else if(sortMode==='rating')result.sort((a,b)=>b.stars-a.stars||b.reviews-a.reviews);
+  else if(sortMode==='name')result.sort((a,b)=>a.name.localeCompare(b.name));
+  else result.sort((a,b)=>b.reviews-a.reviews);
+  renderProducts(result);
+}
+
+function updateTags(){
+  const wrap=document.getElementById('active-tags-wrap');
+  const tags=document.getElementById('active-tags');
+  const all=[...activeNeeds,...activeFilters];
+  if(all.length===0){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  tags.innerHTML=all.map(t=>`<span class="atag">${t} <span class="atag-rm" onclick="removeTag('${t}')">✕</span></span>`).join('');
+}
+
+function removeTag(tag){
+  activeNeeds.delete(tag);activeFilters.delete(tag);
+  document.querySelectorAll('.need-chip').forEach(c=>{if(c.textContent===tag)c.classList.remove('active');});
+  ['bio','ecocert','hebbd','vegan'].forEach(k=>{if(k===tag.toLowerCase()){const el=document.getElementById('f-'+k);if(el)el.checked=false;}});
+  applyFilters();updateTags();
+}
+
+function clearAll(){
+  activeNeeds.clear();activeFilters.clear();minRating=0;maxPrice=100;
+  document.querySelectorAll('.need-chip').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.filter-item input, input[name=rating]').forEach(cb=>cb.checked=false);
+  document.getElementById('price-range').value=100;
+  document.getElementById('price-label').textContent='Tous les prix';
+  document.getElementById('search-input').value='';
+  updateTags();applyFilters();
+}
+
+function renderProducts(list){
+  const grid=document.getElementById('pgrid');
+  document.getElementById('results-count').textContent=list.length;
+  if(list.length===0){grid.innerHTML='<div class="empty-state"><div class="empty-icon">🌿</div><div class="empty-title">Aucun produit trouvé</div><div class="empty-sub">Modifiez vos filtres pour afficher plus de produits</div><br><button onclick="clearAll()" style="padding:8px 20px;border:1px solid var(--beige-dark);background:#fff;border-radius:40px;cursor:pointer;font-family:var(--font-sans);font-size:0.82rem;color:var(--text-mid);">Effacer les filtres</button></div>';return;}
+  grid.innerHTML=list.map(p=>{
+    const w=wishlist.has(p.id);
+    const b=p.badge?`<span class="pbadge b-${p.badge}">${p.badgeLabel}</span>`:'';
+    const op=p.badge==='promo'?`<span class="pcard-price-old">${(p.price*1.18).toFixed(2).replace('.',',')} €</span>`:'';
+    return `<div class="pcard" onclick="openModal(${p.id})">
+      <div class="pcard-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy">${b}<span class="pwish ${w?'wished':''}" onclick="event.stopPropagation();toggleWish(${p.id},this)">${w?'♥':'♡'}</span></div>
+      <div class="pcard-body">
+        <div class="pcard-cat">${p.catLabel}</div>
+        <div class="pcard-name">${p.name}</div>
+        <div class="pcard-volume">${p.volume}</div>
+        <div class="pcard-stars">${'★'.repeat(p.stars)}${'☆'.repeat(5-p.stars)}<span>(${p.reviews})</span></div>
+        <div class="pcard-tags">${p.needs.map(n=>`<span class="ptag">${n}</span>`).join('')}${p.bio?'<span class="ptag" style="background:var(--green-pale);color:var(--sage-dark);">Bio ✓</span>':''}${p.hebbd?'<span class="ptag" style="background:#ede8f8;color:#5a4a8a;">HEBBD</span>':''}</div>
+      </div>
+      <div class="pcard-footer" onclick="event.stopPropagation()">
+        <div><span class="pcard-price">${p.price.toFixed(2).replace('.',',')} €</span>${op}</div>
+        <button class="btn-add" onclick="addCart(${p.id})">+ Panier</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleWish(id,el){if(wishlist.has(id)){wishlist.delete(id);el.textContent='♡';el.classList.remove('wished');toast('♡','Retiré de la wishlist');}else{wishlist.add(id);el.textContent='♥';el.classList.add('wished');toast('❤️','Ajouté à votre wishlist !');}}
+function addCart(id){const p=products.find(x=>x.id===id);cartCount++;document.getElementById('cart-count').textContent=cartCount;toast('🛒',`"${p.name}" ajouté au panier !`);}
+
+function openModal(id){
+  const p=products.find(x=>x.id===id);currentProduct=p;currentQty=1;
+  document.getElementById('modal-img').src=p.img;document.getElementById('modal-img').alt=p.name;
+  document.getElementById('modal-cat').textContent=p.catLabel;
+  document.getElementById('modal-name').textContent=p.name;
+  document.getElementById('modal-stars').innerHTML='★'.repeat(p.stars)+'☆'.repeat(5-p.stars)+` <span style="color:var(--text-light)">(${p.reviews} avis vérifiés)</span>`;
+  document.getElementById('modal-desc').textContent=p.desc;
+  document.getElementById('tab-bienfaits').innerHTML='<ul>'+p.bienfaits.map(b=>`<li>${b}</li>`).join('')+'</ul>';
+  document.getElementById('tab-utilisation').textContent=p.utilisation;
+  document.getElementById('tab-composition').textContent=p.composition;
+  document.getElementById('qty-num').textContent=1;
+  document.getElementById('modal-price').textContent=p.price.toFixed(2).replace('.',',')+' €';
+  document.getElementById('modal-volume').textContent=p.volume;
+  document.getElementById('modal-cart-btn').textContent=`Ajouter au panier — ${p.price.toFixed(2).replace('.',',')} €`;
+  const mw=document.getElementById('modal-wish');mw.textContent=wishlist.has(p.id)?'♥':'♡';mw.className='pwish'+(wishlist.has(p.id)?' wished':'');
+  switchTab('bienfaits',document.querySelector('.modal-tab'));
+  document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
+function switchTab(id,el){document.querySelectorAll('.modal-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.modal-tab-content').forEach(c=>c.style.display='none');if(el)el.classList.add('active');document.getElementById('tab-'+id).style.display='block';}
+function changeQty(delta){currentQty=Math.max(1,currentQty+delta);document.getElementById('qty-num').textContent=currentQty;if(currentProduct){const total=(currentProduct.price*currentQty).toFixed(2).replace('.',',');document.getElementById('modal-price').textContent=total+' €';document.getElementById('modal-cart-btn').textContent=`Ajouter au panier — ${total} €`;}}
+function addFromModal(){cartCount+=currentQty;document.getElementById('cart-count').textContent=cartCount;toast('🛒',`"${currentProduct.name}" ×${currentQty} ajouté !`);closeModal();}
+function toggleWishModal(){if(!currentProduct)return;const id=currentProduct.id;const el=document.getElementById('modal-wish');if(wishlist.has(id)){wishlist.delete(id);el.textContent='♡';el.classList.remove('wished');toast('♡','Retiré de la wishlist');}else{wishlist.add(id);el.textContent='♥';el.classList.add('wished');toast('❤️','Ajouté à la wishlist !');}}
+function setView(v){viewMode=v;const g=document.getElementById('pgrid');g.className='pgrid'+(v==='list'?' list-view':'');document.getElementById('vbtn-grid').className='vbtn'+(v==='grid'?' active':'');document.getElementById('vbtn-list').className='vbtn'+(v==='list'?' active':'');}
+function toggleSb(head){head.classList.toggle('collapsed');head.nextElementSibling.classList.toggle('hidden');}
+let tTimer;function toast(icon,msg){clearTimeout(tTimer);document.getElementById('t-icon').textContent=icon;document.getElementById('t-msg').textContent=msg;document.getElementById('toast').classList.add('show');tTimer=setTimeout(()=>document.getElementById('toast').classList.remove('show'),3000);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// Lire la catégorie depuis l'URL au chargement
+// Ex: boutique.html?cat=tisanes → filtre direct sur les tisanes
+const urlParams=new URLSearchParams(window.location.search);
+const catParam=urlParams.get('cat');
+if(catParam){
+  const el=document.querySelector(`[data-cat="${catParam}"]`);
+  if(el) selectCat(catParam,el);
+  else applyFilters();
+} else {
+  applyFilters();
+}
+</script>
+</body>
+</html>
